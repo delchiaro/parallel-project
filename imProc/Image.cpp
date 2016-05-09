@@ -3,3 +3,11 @@
 //
 
 #include "Image.h"
+
+
+
+namespace imProc
+{
+
+
+}

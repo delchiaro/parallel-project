@@ -6,69 +6,62 @@
 #define DISPLAYIMAGE_MATRIX_H
 
 
+#include "imProc.h"
+
+
+
 namespace imProc {
 
 
-    template<class T>
-    class Matrix {
+    template<class T> class Matrix
+    {
     private:
-        const int cols;
-        const int rows;
-        T *mat;
+        const int _rows;
+        const int _cols;
+        T *_mat;
 
     protected:
         inline int _index(int row, int col) const {
-            return row + col * this->rows;
+            return col + row * this->_cols;
         }
 
 
     public:
-        Matrix(int rows, int cols) : cols(rows), rows(cols) {
-            mat = new T[rows * cols];
-        }
 
-        Matrix(Matrix &m const) : cols(m.rows), rows(m.cols) {
-            mat = new T[rows * cols];
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < rows; j++) {
-                    this->mat[_index(i, j)] = m.get(i, j); // verificare che sia performante, dato che è inline
-                }
+        Matrix(int rows, int cols) : _rows(rows), _cols(cols) {
+            _mat = new T[rows * cols];
+        }
+        Matrix(int rows, int cols, const T& initVal) : Matrix(rows, cols) {
+            for(int i = 0; i < _cols*_rows; i++) _mat[i] = initVal;
+        }
+        Matrix(const Matrix<T>& m) : _rows(m._rows), _cols(m._cols) {
+            this->_mat = new T[_rows * _cols];
+            for (int i = 0; i < _rows*_cols; i++) {
+                    this->_mat[i] = m._mat[i];
             }
         }
 
-
         ~Matrix() {
-            delete mat;
-        }
-
-        inline T get(int row, int col) const {
-            return mat[_index(row, col)];
-        }
-
-        inline const T &getR(int row, int col) const {
-            return mat[_index(row, col)];
-        }
-
-        inline T *getP(int row, int col) {
-            return &mat[_index(row, col)];
+            delete _mat;
         }
 
 
-        inline void set(int row, int col, const T &value) {
-            mat[_index(row, col)] = value;
-        }
-    //
-    //    inline void set(int row, int col, const T* value)
-    //    {
-    //        mat[_index(row, col)] = *value;
-    //    }
+        Matrix<T>* clone() const { return new Matrix<T>(*this); }
 
 
+        inline const int& rows() const { return this->_rows; }
+        inline const int& cols() const { return this->_cols; }
 
 
+        inline const T* getRawMatrix() const        { return _mat; }
+
+        inline const T& get (int row, int col) const { return _mat[_index(row, col)]; }
+        inline       T  getV(int row, int col) const { return _mat[_index(row, col)]; }
+        inline       T* getP(int row, int col)       { return &_mat[_index(row, col)]; }
 
 
-
+        inline void set(int row, int col, const T &value) { _mat[_index(row, col)] = value; }
+        inline void set(int row, int col, const T* value) { _mat[_index(row, col)] = *value; }
 
 
     };
