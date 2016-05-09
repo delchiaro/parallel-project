@@ -10,12 +10,12 @@ using namespace cv;
 class Matrix
 {
 private:
-    int columns;
+    int cols;
     int rows;
     uchar* mat;
 
 public:
-    Matrix(int rows, int cols) : columns(rows), rows(cols)
+    Matrix(int rows, int cols) : cols(rows), rows(cols)
     {
         mat = new uchar[rows * cols];
     }
@@ -25,6 +25,8 @@ public:
         delete mat;
     }
 
+
+    uchar
 
 };
 
