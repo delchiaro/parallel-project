@@ -46,7 +46,7 @@ namespace imProc {
         }
 
 
-        Matrix<T>* clone() const { return new Matrix<T>(*this); }
+        Matrix<T> clone() const { return Matrix<T>(*this); }
 
 
         inline const int& rows() const { return this->_rows; }
@@ -60,7 +60,7 @@ namespace imProc {
         inline       T* getP(int row, int col)       { return &_mat[_index(row, col)]; }
 
 
-        inline void set(int row, int col, const T &value) { _mat[_index(row, col)] = value; }
+        inline void set(int row, int col, const T& value) { _mat[_index(row, col)] = value; }
         inline void set(int row, int col, const T* value) { _mat[_index(row, col)] = *value; }
 
 

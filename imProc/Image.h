@@ -36,39 +36,43 @@ namespace imProc
 
         Image(int rows, int cols, const T& initVal) : Matrix<T>(rows, cols, initVal) { }
 
-        Image<T>* clone() const { return new Image(*this); }
+        Image<T> clone() const { return Image(*this); }
 
 
 
-        cv::Mat* toMatCV() {
-            return new cv::Mat(this->rows(), this->cols(), CV_8U, (void*) this->getRawMatrix() , 0);
+        inline  cv::Mat toMatCV() const {
+            return cv::Mat(this->rows(), this->cols(), CV_8U, (void*) this->getRawMatrix() , 0);
+            // NB: We hope in Return Value Optimization (see wikipedia)
         }
-        cv::Mat* toMatCV_for()
+        inline cv::Mat toMatCV_for() const
         {
-            cv::Mat* cvMat =  new cv::Mat( *(new cv::Size(this->rows(), this->cols()) ), 0);
+            cv::Mat cvMat =  cv::Mat( cv::Size(this->rows(), this->cols()), 0);
             for(int i = 0; i < this->rows(); i++)
                 for(int j = 0; j < this->cols(); j++)
-                    cvMat->row(i).col(j).data = this->get(i, j);
+                    cvMat.row(i).col(j).data = this->get(i, j);
             return cvMat;
+            // NB: We hope in Return Value Optimization (see wikipedia)
         }
 
 
 
-        void imshow(std::string msg = "") {
-            cv::imshow(msg, *toMatCV() );
+        inline void imshow(std::string msg = "") {
+            cv::Mat m = toMatCV();
+            cv::imshow(msg, m);
+            //delete m;
         }
 
 
-        inline Image<T>* dilation(const Matrix<bool>& SE, const Point<int>& SE_center) {
+        inline Image<T> dilation(const Matrix<bool>& SE, const Point<int>& SE_center) {
             return dilation(*this, SE, SE_center);
         }
-        inline Image<T>* erosion(const Matrix<bool>& SE, const Point<int>& SE_center) {
+        inline Image<T> erosion(const Matrix<bool>& SE, const Point<int>& SE_center) {
             return erosion(*this, SE, SE_center);
         }
-        inline Image<T>* opening(const Matrix<bool>& SE, const Point<int>& SE_center) {
+        inline Image<T> opening(const Matrix<bool>& SE, const Point<int>& SE_center) {
             return opening(*this, SE, SE_center);
         }
-        inline Image<T>* closure(const Matrix<bool>& SE, const Point<int>& SE_center) {
+        inline Image<T> closure(const Matrix<bool>& SE, const Point<int>& SE_center) {
             return closure(*this, SE, SE_center);
         }
 
@@ -91,8 +95,8 @@ namespace imProc
 
 
     public:
-        static Image<T>* newImageCV(std::string path) {
-            return new Image(_readImageCV(path));
+        static Image<T> newImageCV(std::string path) {
+            return Image(_readImageCV(path));
         }
 
 
@@ -100,11 +104,12 @@ namespace imProc
 
 
 
-        static Image<T>* dilation(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center) {
+        static Image<T> dilation(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
+        {
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
 
-            Image *output = img.clone();
+            Image output = img.clone();
 
             for (int y = 0; y < img.rows(); y++) {
                 for (int x = 0; x < img.cols(); x++) {
@@ -127,18 +132,19 @@ namespace imProc
                         }
                     }
 
-                    output->set(y, x, min);
+                    output.set(y, x, min);
                 }
             }
             return output;
         }
 
 
-        static Image<T>* erosion(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center) {
+        static Image<T> erosion(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
+        {
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
 
-            Image *output = img.clone();
+            Image output = img.clone();
 
             for (int y = 0; y < img.rows(); y++) {
                 for (int x = 0; x < img.cols(); x++) {
@@ -161,23 +167,23 @@ namespace imProc
                         }
                     }
 
-                    output->set(y, x, max);
+                    output.set(y, x, max);
                 }
             }
             return output;
         }
 
 
-        static inline Image<T>* opening(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
+        static inline Image<T> opening(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
         {
-            Image* er = erosion(img, SE, SE_center);
-            return dilation(*er, SE, SE_center);
+            Image er = erosion(img, SE, SE_center);
+            return dilation(er, SE, SE_center);
         }
 
-        static inline Image<T>* closure(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
+        static inline Image<T> closure(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
         {
-            Image* dil = dilation(img, SE, SE_center);
-            return erosion(*dil, SE, SE_center);
+            Image dil = dilation(img, SE, SE_center);
+            return erosion(dil, SE, SE_center);
         }
 
 
