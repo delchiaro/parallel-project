@@ -3,13 +3,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/imProc/Matrix.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/imProc/Image.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/imProc/Matrix.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/imProc/Image.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/imProc/point.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/imProc/point.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/imProc/imProc.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/imProc/Image.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/imProc/Matrix.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/DisplayImage.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />

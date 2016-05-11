@@ -19,28 +19,28 @@ int main(int argc, char** argv ) {
         return -1;
     }
 
-    Image image = *Image::newImageCV(argv[1]);
+    Image image = Image::newImageCV(argv[1]);
     image.imshow("Original Image");
 
-    Image copy = *image.clone();
+    Image copy = image.clone();
     copy.imshow("clone image");
 
     int rows = 6;
     int cols = 6;
     imProc::Matrix<bool> SE(cols, rows, true);
 
-    imProc::Point<int> center( (int)ceil(cols/2), (int)ceil(rows/2));
+    imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
 
-    Image open = * image.opening(SE, center );
+    Image open = image.opening(SE, center );
     //namedWindow("Opened Image", WINDOW_AUTOSIZE );
     open.imshow("Opened Image");
 
 
-    Image closed = *image.closure( SE, center );
+    Image closed = image.closure( SE, center );
     //namedWindow("Closed Image", WINDOW_AUTOSIZE );
     closed.imshow("Closed Image");
 
-    Image closedOpened = *open.closure(SE, center);
+    Image closedOpened = open.closure(SE, center);
     closedOpened.imshow("Closed Opened Image");
 
 
