@@ -16,7 +16,6 @@
 namespace imProc
 {
 
-
     template <typename T> class Image {
     private:
         Matrix<T> _mat;
@@ -73,10 +72,6 @@ namespace imProc
 
 
 
-        // shallow converter
-        inline cv::Mat toMatCV() const  {  return this->_mat.toMatCV();  }
-
-
 
         void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             this->_mat = _mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
@@ -94,27 +89,101 @@ namespace imProc
         }
 
 
-        inline Image<T> dilation(const Matrix<bool>& SE, const Point<int>& SE_center) {
-            return dilation(*this, SE, SE_center);
+
+
+        void dilation(const Matrix<bool>& SE, const Point<int>& SE_center)
+        {
+            //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
+            //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
+
+            Image copy = Image(*this);
+
+            for (int y = 0; y < copy.rows(); y++)
+            {
+                for (int x = 0; x < copy.cols(); x++)
+                {
+                    uchar min = copy.get(y, x);
+
+                    for (int i = 0; i < SE.rows(); i++)
+                    {
+                        for (int j = 0; j < SE.cols(); j++)
+                        {
+                            // TODO: make an immersion of the matrix such that this check is no more needed:
+                            if( (y - SE_center.y() + i) >= 0 && (x - SE_center.x() + j) >= 0 &&
+                                (y - SE_center.y() + i) < copy.rows() && (x - SE_center.x() + j) < copy.cols())
+                            { // CHECK if SE is inside the image edges
+
+                                if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
+                                {
+                                    const uchar& current = copy.get(y - SE_center.y() + i, x - SE_center.x() + j);
+                                    if (current < min)
+                                        min = current;
+                                }
+                            }
+                        }
+                    }
+
+                    this->set(y, x, min);
+                }
+            }
         }
-        inline Image<T> erosion(const Matrix<bool>& SE, const Point<int>& SE_center) {
-            return erosion(*this, SE, SE_center);
+
+        inline void erosion(const Matrix<bool>& SE, const Point<int>& SE_center)
+        {
+            //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
+            //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
+
+            Image copy = Image(*this);
+
+            for (int y = 0; y < copy.rows(); y++)
+            {
+                for (int x = 0; x < copy.cols(); x++)
+                {
+                    uchar max = copy.get(y, x);
+                    for (int i = 0; i < SE.rows(); i++)
+                    {
+                        for (int j = 0; j < SE.cols(); j++)
+                        {
+
+                            // TODO: make an immersion of the matrix such that this check is no more needed:
+                            if( (y - SE_center.y() + i) >= 0 && (x - SE_center.x() + j) >= 0 &&
+                                (y - SE_center.y() + i) < copy.rows() && (x - SE_center.x() + j) < copy.cols())
+                            { // CHECK if SE is inside the image edges
+
+                                if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
+                                {
+                                    const uchar& current = copy.get(y - SE_center.y() + i, x - SE_center.x() + j);
+                                    if (current > max)
+                                        max = current;
+                                }
+                            }
+                        }
+                    }
+
+                    this->set(y, x, max);
+                }
+            }
         }
-        inline Image<T> opening(const Matrix<bool>& SE, const Point<int>& SE_center) {
-            return opening(*this, SE, SE_center);
+
+
+        inline void opening(const Matrix<bool>& SE, const Point<int>& SE_center)
+        {
+            erosion(SE, SE_center);
+            dilation(SE, SE_center);
         }
-        inline Image<T> closure(const Matrix<bool>& SE, const Point<int>& SE_center) {
-            return closure(*this, SE, SE_center);
+
+        inline void closure(const Matrix<bool>& SE, const Point<int>& SE_center)
+        {
+            dilation(SE, SE_center);
+            erosion(SE, SE_center);
         }
 
 
 
 
 
-
-
-
-
+        // shallow converter
+        inline cv::Mat toMatCV() const  {  return this->_mat.toMatCV();  }
 
 
 
@@ -138,89 +207,6 @@ namespace imProc
 
         }
 
-
-
-        static Image<T> dilation(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
-        {
-            //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
-            //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
-
-            Image output = Image(img);
-
-            for (int y = 0; y < img.rows(); y++) {
-                for (int x = 0; x < img.cols(); x++) {
-
-
-                    uchar min = img.get(y, x);
-                    for (int i = 0; i < SE.rows(); i++) {
-                        for (int j = 0; j < SE.cols(); j++) {
-                            if( (y - SE_center.y() + i) >= 0 && (x - SE_center.x() + j) >= 0 &&
-                                (y - SE_center.y() + i) < img.rows() && (x - SE_center.x() + j) < img.cols())
-                            { // CHECK if SE is inside the image edges
-
-                                if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
-                                {
-                                    const uchar *current = &img.get(y - SE_center.y() + i, x - SE_center.x() + j);
-                                    if (*current < min)
-                                        min = *current;
-                                }
-                            }
-                        }
-                    }
-
-                    output.set(y, x, min);
-                }
-            }
-            return output;
-        }
-
-
-        static Image<T> erosion(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
-        {
-            //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
-            //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
-
-            Image output = Image(img);
-
-            for (int y = 0; y < img.rows(); y++) {
-                for (int x = 0; x < img.cols(); x++) {
-
-
-                    uchar max = img.get(y, x);
-                    for (int i = 0; i < SE.rows(); i++) {
-                        for (int j = 0; j < SE.cols(); j++) {
-                            if ((y - SE_center.y() + i) >= 0 && (x - SE_center.x() + j) >= 0 &&
-                                (y - SE_center.y() + i) < img.rows() &&
-                                (x - SE_center.x() + j) < img.cols()) { // CHECK if SE is inside the image edges
-
-                                if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
-                                {
-                                    const uchar *current = &img.get(y - SE_center.y() + i, x - SE_center.x() + j);
-                                    if (*current > max)
-                                        max = *current;
-                                }
-                            }
-                        }
-                    }
-
-                    output.set(y, x, max);
-                }
-            }
-            return output;
-        }
-
-
-        static inline Image<T> opening(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
-        {
-            Image er = erosion(img, SE, SE_center);
-            return dilation(er, SE, SE_center);
-        }
-
-        static inline Image<T> closure(const Image<T>& img, const Matrix<bool>& SE, const Point<int>& SE_center)
-        {
-            Image dil = dilation(img, SE, SE_center);
-            return erosion(dil, SE, SE_center);
-        }
 
 
     };

@@ -118,10 +118,6 @@ namespace imProc {
 
 
 
-        inline  cv::Mat toMatCV() const { //shallow converter
-            return cv::Mat( rows(), cols(), CV_8U, (void*) getRaw() , 0);
-            // NB: We hope in Return Value Optimization (see wikipedia)
-        }
 
         Matrix<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue)
         {
@@ -143,25 +139,12 @@ namespace imProc {
 
 
 
+        cv::Mat toMatCV() const
+        {
+            return cv::Mat( rows(), cols(), CV_8U, (void*) getRaw() , 0);
+            // NB: We hope in Return Value Optimization
+        }
 
-
-
-
-
-
-
-
-        // DEPRECATED:
-//
-//        [[deprecated("Use copy constructor instead")]]
-//        Matrix<T> clone() const { return Matrix<T>(*this); }
-//        [[deprecated("Not safe")]]
-//        Matrix(T* rawMatrix, int rows, int cols, bool shallowCopy) : _rows(rows), _cols(cols), _pmat(rawMatrix) { }
-//        [[deprecated("Not safe")]]
-//        Matrix(const Matrix<T>& m, bool shallowCopy ) :_rows(m._rows), _cols(m._cols), _pmat(m._pmat){
-////            this->_pmat_created = true;
-////            m._pmat_created = false;
-//        }
 
 
     };

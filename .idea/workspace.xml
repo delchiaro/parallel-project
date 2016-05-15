@@ -14,7 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9cfa6b09-91ac-4d88-a24f-16901417c805" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DisplayImage.cpp" afterPath="$PROJECT_DIR$/DisplayImage.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imProc/Image.h" afterPath="$PROJECT_DIR$/imProc/Image.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imProc/Matrix.h" afterPath="$PROJECT_DIR$/imProc/Matrix.h" />
@@ -42,7 +41,7 @@
         <entry file="file://$PROJECT_DIR$/DisplayImage.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <caret line="26" column="35" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -54,46 +53,51 @@
         <entry file="file://$PROJECT_DIR$/imProc/Image.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="136" column="0" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
+              <caret line="213" column="0" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
               <folding>
-                <element signature="e#347#457#0" expanded="false" />
-                <element signature="e#2638#2778#0" expanded="false" />
-                <element signature="e#2787#2925#0" expanded="false" />
-                <element signature="e#2934#3072#0" expanded="false" />
-                <element signature="e#3081#3219#0" expanded="false" />
-                <element signature="e#3753#5201#0" expanded="false" />
-                <element signature="e#5212#6663#0" expanded="false" />
-                <element signature="e#6674#6898#0" expanded="false" />
-                <element signature="e#6908#7134#0" expanded="false" />
+                <element signature="e#0#2#0" expanded="false" />
+                <element signature="e#346#456#0" expanded="false" />
+                <element signature="e#801#884#0" expanded="false" />
+                <element signature="e#893#955#0" expanded="false" />
+                <element signature="e#964#1057#0" expanded="false" />
+                <element signature="e#1921#2142#0" expanded="false" />
+                <element signature="e#2151#2383#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Matrix.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Matrix.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.5399408">
-              <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="137" column="9" selection-start-line="137" selection-start-column="9" selection-end-line="137" selection-end-column="9" />
               <folding>
                 <element signature="e#0#2#0" expanded="false" />
                 <element signature="e#501#598#0" expanded="false" />
                 <element signature="e#619#856#0" expanded="false" />
                 <element signature="e#1021#1208#0" expanded="false" />
                 <element signature="e#1395#1635#0" expanded="false" />
-                <element signature="e#1826#1951#0" expanded="false" />
-                <element signature="e#1960#2128#0" expanded="false" />
-                <element signature="e#2603#2707#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <file leaf-file-name="imProc.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/imProc/imProc.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Image.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/imProc/Image.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.2514793">
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -127,8 +131,8 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/imProc/imProc.h" />
         <option value="$PROJECT_DIR$/DisplayImage.cpp" />
-        <option value="$PROJECT_DIR$/imProc/Matrix.h" />
         <option value="$PROJECT_DIR$/imProc/Image.h" />
+        <option value="$PROJECT_DIR$/imProc/Matrix.h" />
       </list>
     </option>
   </component>
@@ -370,9 +374,6 @@
             <element signature="e#619#856#0" expanded="false" />
             <element signature="e#1021#1208#0" expanded="false" />
             <element signature="e#1395#1635#0" expanded="false" />
-            <element signature="e#1826#1951#0" expanded="false" />
-            <element signature="e#1960#2128#0" expanded="false" />
-            <element signature="e#2603#2707#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -390,15 +391,13 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="39" column="11" selection-start-line="36" selection-start-column="8" selection-end-line="39" selection-end-column="11" />
           <folding>
-            <element signature="e#347#457#0" expanded="false" />
-            <element signature="e#2638#2778#0" expanded="false" />
-            <element signature="e#2787#2925#0" expanded="false" />
-            <element signature="e#2934#3072#0" expanded="false" />
-            <element signature="e#3081#3219#0" expanded="false" />
-            <element signature="e#3753#5201#0" expanded="false" />
-            <element signature="e#5212#6663#0" expanded="false" />
-            <element signature="e#6674#6898#0" expanded="false" />
-            <element signature="e#6908#7134#0" expanded="false" />
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#346#456#0" expanded="false" />
+            <element signature="e#801#884#0" expanded="false" />
+            <element signature="e#893#955#0" expanded="false" />
+            <element signature="e#964#1057#0" expanded="false" />
+            <element signature="e#1921#2142#0" expanded="false" />
+            <element signature="e#2151#2383#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -423,9 +422,6 @@
             <element signature="e#619#856#0" expanded="false" />
             <element signature="e#1021#1208#0" expanded="false" />
             <element signature="e#1395#1635#0" expanded="false" />
-            <element signature="e#1826#1951#0" expanded="false" />
-            <element signature="e#1960#2128#0" expanded="false" />
-            <element signature="e#2603#2707#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -440,9 +436,6 @@
             <element signature="e#619#856#0" expanded="false" />
             <element signature="e#1021#1208#0" expanded="false" />
             <element signature="e#1395#1635#0" expanded="false" />
-            <element signature="e#1826#1951#0" expanded="false" />
-            <element signature="e#1960#2128#0" expanded="false" />
-            <element signature="e#2603#2707#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -452,15 +445,13 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="38" column="55" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="55" />
           <folding>
-            <element signature="e#347#457#0" expanded="false" />
-            <element signature="e#2638#2778#0" expanded="false" />
-            <element signature="e#2787#2925#0" expanded="false" />
-            <element signature="e#2934#3072#0" expanded="false" />
-            <element signature="e#3081#3219#0" expanded="false" />
-            <element signature="e#3753#5201#0" expanded="false" />
-            <element signature="e#5212#6663#0" expanded="false" />
-            <element signature="e#6674#6898#0" expanded="false" />
-            <element signature="e#6908#7134#0" expanded="false" />
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#346#456#0" expanded="false" />
+            <element signature="e#801#884#0" expanded="false" />
+            <element signature="e#893#955#0" expanded="false" />
+            <element signature="e#964#1057#0" expanded="false" />
+            <element signature="e#1921#2142#0" expanded="false" />
+            <element signature="e#2151#2383#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -487,15 +478,13 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="48" column="66" selection-start-line="48" selection-start-column="66" selection-end-line="48" selection-end-column="66" />
           <folding>
-            <element signature="e#347#457#0" expanded="false" />
-            <element signature="e#2638#2778#0" expanded="false" />
-            <element signature="e#2787#2925#0" expanded="false" />
-            <element signature="e#2934#3072#0" expanded="false" />
-            <element signature="e#3081#3219#0" expanded="false" />
-            <element signature="e#3753#5201#0" expanded="false" />
-            <element signature="e#5212#6663#0" expanded="false" />
-            <element signature="e#6674#6898#0" expanded="false" />
-            <element signature="e#6908#7134#0" expanded="false" />
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#346#456#0" expanded="false" />
+            <element signature="e#801#884#0" expanded="false" />
+            <element signature="e#893#955#0" expanded="false" />
+            <element signature="e#964#1057#0" expanded="false" />
+            <element signature="e#1921#2142#0" expanded="false" />
+            <element signature="e#2151#2383#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -535,9 +524,6 @@
             <element signature="e#619#856#0" expanded="false" />
             <element signature="e#1021#1208#0" expanded="false" />
             <element signature="e#1395#1635#0" expanded="false" />
-            <element signature="e#1826#1951#0" expanded="false" />
-            <element signature="e#1960#2128#0" expanded="false" />
-            <element signature="e#2603#2707#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -547,15 +533,13 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#347#457#0" expanded="false" />
-            <element signature="e#2638#2778#0" expanded="false" />
-            <element signature="e#2787#2925#0" expanded="false" />
-            <element signature="e#2934#3072#0" expanded="false" />
-            <element signature="e#3081#3219#0" expanded="false" />
-            <element signature="e#3753#5201#0" expanded="false" />
-            <element signature="e#5212#6663#0" expanded="false" />
-            <element signature="e#6674#6898#0" expanded="false" />
-            <element signature="e#6908#7134#0" expanded="false" />
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#346#456#0" expanded="false" />
+            <element signature="e#801#884#0" expanded="false" />
+            <element signature="e#893#955#0" expanded="false" />
+            <element signature="e#964#1057#0" expanded="false" />
+            <element signature="e#1921#2142#0" expanded="false" />
+            <element signature="e#2151#2383#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -739,24 +723,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/imProc/Image.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/imProc/Matrix.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/imProc/imProc.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -782,14 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/imProc/point.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -803,45 +765,64 @@
     <entry file="file://$PROJECT_DIR$/DisplayImage.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <caret line="26" column="35" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/imProc.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/imProc/Image.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="136" column="0" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
+          <caret line="213" column="0" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
           <folding>
-            <element signature="e#347#457#0" expanded="false" />
-            <element signature="e#2638#2778#0" expanded="false" />
-            <element signature="e#2787#2925#0" expanded="false" />
-            <element signature="e#2934#3072#0" expanded="false" />
-            <element signature="e#3081#3219#0" expanded="false" />
-            <element signature="e#3753#5201#0" expanded="false" />
-            <element signature="e#5212#6663#0" expanded="false" />
-            <element signature="e#6674#6898#0" expanded="false" />
-            <element signature="e#6908#7134#0" expanded="false" />
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#346#456#0" expanded="false" />
+            <element signature="e#801#884#0" expanded="false" />
+            <element signature="e#893#955#0" expanded="false" />
+            <element signature="e#964#1057#0" expanded="false" />
+            <element signature="e#1921#2142#0" expanded="false" />
+            <element signature="e#2151#2383#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5399408">
-          <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="137" column="9" selection-start-line="137" selection-start-column="9" selection-end-line="137" selection-end-column="9" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
             <element signature="e#501#598#0" expanded="false" />
             <element signature="e#619#856#0" expanded="false" />
             <element signature="e#1021#1208#0" expanded="false" />
             <element signature="e#1395#1635#0" expanded="false" />
-            <element signature="e#1826#1951#0" expanded="false" />
-            <element signature="e#1960#2128#0" expanded="false" />
-            <element signature="e#2603#2707#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35207102">
+          <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/Image.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2514793">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -20,12 +20,11 @@ int main(int argc, char** argv ) {
     }
 
 
-    Image image = Image::readImageCV(argv[1]);
-    //image(argv[1]);
+    Image image(argv[1]);
     image.imshow("Original Image");
 
-    Image copy = image.makeImmersion(2,5,2,30, 0);
-    copy.imshow("clone image");
+    Image immersion = image.makeImmersion(10,13,20,30, 0);
+    immersion.imshow("ImmersionTest");
 
 
 
@@ -35,19 +34,22 @@ int main(int argc, char** argv ) {
 
     imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
 
-    Image open = image.opening(SE, center );
+    Image open(image);
+    open.opening(SE, center );
     //namedWindow("Opened Image", WINDOW_AUTOSIZE );
     open.imshow("Opened Image");
 
 
-    Image closed = image.closure( SE, center );
+    Image close(image);
+    close.closure( SE, center );
     //namedWindow("Closed Image", WINDOW_AUTOSIZE );
-    closed.imshow("Closed Image");
+    close.imshow("Closed Image");
 
-    Image closedOpened = open.closure(SE, center);
-    closedOpened.imshow("Closed Opened Image");
+    open.closure(SE, center);
+    open.imshow("Closure on Opened Image");
 
-
+    close.opening(SE, center);
+    close.imshow("Opening on Closed Image");
 
     cv::waitKey(0);
 
