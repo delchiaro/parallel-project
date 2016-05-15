@@ -20,11 +20,11 @@ int main(int argc, char** argv ) {
     }
 
 
-    Image image(argv[1]);
+    Image image = Image::readImageCV(argv[1]);
+    //image(argv[1]);
     image.imshow("Original Image");
 
-
-    Image copy = image.getImmersion(2,5,2,30, 0);
+    Image copy = image.makeImmersion(2,5,2,30, 0);
     copy.imshow("clone image");
 
 

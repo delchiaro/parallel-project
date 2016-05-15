@@ -24,25 +24,26 @@ namespace imProc
 
     public:
 
-
-        Image(cv::Mat openCV_image) : _mat( openCV_image.data, openCV_image.rows, openCV_image.cols ) { }
-        // will make a deep copy of openCV_image.data.. overhead but safer.
-
-        Image( std::string imgPath) : Image(_readImageCV(imgPath)) {}
-
-        Image(Matrix<T> matrix) :_mat(matrix) { }
-        // will make a deep copy of matrix... overhead but safer.
-
         Image(int rows, int cols, const T& initVal){
             this->mat = Matrix<T>(rows, cols, initVal);
         }
 
-        // copy constructor
+        Image(const Matrix<T>& matrix) :_mat(matrix) { } // deep copy of matrix
+        Image(Matrix<T>&& matrix) :_mat(std::move(matrix)) { } // move constructor of matrix
+
+        Image( std::string imgPath) : Image(readImageCV(imgPath)) {}
+
+
+        // Copy, Assignmnet, Move
         Image( const Image& copy ) : _mat(copy._mat){ }
         Image<T>& operator= (const Image &im) {
             this->_mat = im._mat;
         }
-        Image<T> clone() const { return Image(*this); }
+        Image(Image&& move ) :  _mat(std::move(move._mat)) {
+        }
+        Image<T>& operator= (Image&& move) {
+            this->_mat = std::move(move._mat);
+        }
 
 
 
@@ -51,72 +52,37 @@ namespace imProc
 
 
 
-
-        inline const int& rows() const { return _mat._rows; }
-        inline const int& cols() const { return _mat._cols; }
+        inline const int&   rows()  const { return _mat.rows(); }
+        inline const int&   cols()  const { return _mat.cols(); }
 
 
         // ~ ~ GETTERS ~ ~
-        //2D:
-        inline const T& get (int row, int col) const { return _pmat[_index(row, col)]; }
-        inline       T  getV(int row, int col) const { return _pmat[_index(row, col)]; }
-        //1D:
-        inline const T& get (int index) const { return _pmat[index]; }
-        inline       T  getV(int index) const { return _pmat[index]; }
-        //RAW:
-        inline T* getRaw() const  { return _pmat; } // pointer to const data (immutable - read only)
-
+        inline const T&     get (int row, int col)  const { return _mat.get(row, col);   }
+        inline const T&     get (int index)         const { return _mat.get(index);      }
+        inline       T      getV(int row, int col)  const { return _mat.get(row, col);   }
+        inline       T      getV(int index)         const { return _mat.get(index);      }
+        inline Matrix<T>    getMatrix()             const { return _mat;                 }
 
 
         // ~ ~ SETTERS ~ ~
-        //2D:
-        inline void set(int row, int col, const T& value) { _pmat[_index(row, col)] = value; }
-        //1D:
-        inline void set(int index, const T& value) { _pmat[index] = value; }
+        inline void         set(int row, int col, const T& value)   { _mat.set(row, col, value); }
+        inline void         set(int index, const T& value)          { _mat.set(index, value); }
 
 
 
 
 
 
-
-
-
-
-
-
-
+        // shallow converter
         inline cv::Mat toMatCV() const  {  return this->_mat.toMatCV();  }
-//        inline cv::Mat toMatCV_for() const
-//        {
-//            cv::Mat cvMat =  cv::Mat( cv::Size(this->rows(), this->cols()), 0);
-//            for(int i = 0; i < this->rows(); i++)
-//                for(int j = 0; j < this->cols(); j++)
-//                    cvMat.row(i).col(j).data = this->get(i, j);
-//            return cvMat;
-//            // NB: We hope in Return Value Optimization (see wikipedia)
-//        }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue)
-        {
-            this->_mat = this->_mat.immersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
+        void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+            this->_mat = _mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
         }
-        Image<T> getImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue)
-        {
-            return Image<T>(_mat.immersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));
+        Image<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+            return Image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));
         }
 
 
@@ -143,31 +109,34 @@ namespace imProc
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // * * * static:      * * *
 
-    protected:
-        static cv::Mat _readImageCV(std::string path)
-        {
-            using namespace cv;
-            Mat image =  imread( path, CV_LOAD_IMAGE_GRAYSCALE); //CV_LOAD_IMAGE_GRAYSCALE);
 
-            if ( !image.data )
+    public:
+        static Image<T> readImageCV(std::string path)
+        {
+            cv::Mat cvImg =  cv::imread( path, CV_LOAD_IMAGE_GRAYSCALE); //CV_LOAD_IMAGE_GRAYSCALE);
+            using namespace cv;
+            if ( !cvImg.data )
             {
                 // printf("No image data \n");
                 // TODO: generate exception
             }
-            return imread( path, CV_LOAD_IMAGE_GRAYSCALE); //CV_LOAD_IMAGE_GRAYSCALE);
+            Image<T> im = Image<T>( Matrix<T>(cvImg.data, cvImg.rows, cvImg.cols) );
+            return im;
+
         }
-
-
-    public:
-        // TODO: remove this method.. deprecated! (use constructor instead)
-        static Image<T> newImageCV(std::string path) {
-            return Image(_readImageCV(path));
-        }
-
-
-
 
 
 
@@ -176,7 +145,7 @@ namespace imProc
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
 
-            Image output = img.clone();
+            Image output = Image(img);
 
             for (int y = 0; y < img.rows(); y++) {
                 for (int x = 0; x < img.cols(); x++) {
@@ -211,9 +180,9 @@ namespace imProc
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
 
-            Image output = img.clone();
+            Image output = Image(img);
 
-            for (int y = 0; y < rows(); y++) {
+            for (int y = 0; y < img.rows(); y++) {
                 for (int x = 0; x < img.cols(); x++) {
 
 
