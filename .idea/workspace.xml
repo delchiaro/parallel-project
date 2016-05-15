@@ -15,11 +15,11 @@
   <component name="ChangeListManager">
     <list default="true" id="9cfa6b09-91ac-4d88-a24f-16901417c805" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/Debug/DisplayImage" afterPath="$PROJECT_DIR$/bin/Debug/DisplayImage" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/parallel-project.iml" afterPath="$PROJECT_DIR$/.idea/parallel-project.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DisplayImage.cpp" afterPath="$PROJECT_DIR$/DisplayImage.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imProc/Image.h" afterPath="$PROJECT_DIR$/imProc/Image.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imProc/Matrix.h" afterPath="$PROJECT_DIR$/imProc/Matrix.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imProc/imProc.h" afterPath="$PROJECT_DIR$/imProc/imProc.h" />
     </list>
     <ignored path="parallel-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,46 +40,63 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Matrix.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#2#0" expanded="false" />
-                <element signature="e#292#389#0" expanded="false" />
-                <element signature="e#413#517#0" expanded="false" />
-                <element signature="e#526#671#0" expanded="false" />
-                <element signature="e#680#911#0" expanded="false" />
-                <element signature="e#921#967#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Image.h" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/imProc/Image.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.53333336">
-              <caret line="44" column="71" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="71" />
-              <folding>
-                <element signature="e#0#2#0" expanded="false" />
-                <element signature="e#4248#5700#0" expanded="false" />
-                <element signature="e#5711#5935#0" expanded="false" />
-                <element signature="e#5945#6171#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DisplayImage.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DisplayImage.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
+              <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Image.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/imProc/Image.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#2#0" expanded="false" />
+                <element signature="e#3231#3369#0" expanded="false" />
+                <element signature="e#3378#3516#0" expanded="false" />
+                <element signature="e#3525#3663#0" expanded="false" />
+                <element signature="e#4363#5812#0" expanded="false" />
+                <element signature="e#7282#7506#0" expanded="false" />
+                <element signature="e#7516#7742#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Matrix.h" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.39276809">
+              <caret line="23" column="35" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#2#0" expanded="false" />
+                <element signature="e#452#549#0" expanded="false" />
+                <element signature="e#572#711#0" expanded="false" />
+                <element signature="e#720#866#0" expanded="false" />
+                <element signature="e#875#1046#0" expanded="false" />
+                <element signature="e#1203#1299#0" expanded="false" />
+                <element signature="e#1419#1625#0" expanded="false" />
+                <element signature="e#1635#1811#0" expanded="false" />
+                <element signature="e#2738#2927#0" expanded="false" />
+                <element signature="e#2937#3494#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,15 +121,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Matrix.h" />
         <option value="$PROJECT_DIR$/Image.h" />
-        <option value="$PROJECT_DIR$/imProc/imProc.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/imProc/Image.cpp" />
         <option value="$PROJECT_DIR$/imProc/point.h" />
-        <option value="$PROJECT_DIR$/imProc/Matrix.h" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/imProc/imProc.h" />
         <option value="$PROJECT_DIR$/DisplayImage.cpp" />
+        <option value="$PROJECT_DIR$/imProc/Matrix.h" />
         <option value="$PROJECT_DIR$/imProc/Image.h" />
       </list>
     </option>
@@ -122,6 +139,7 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
   </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
     <option name="width" value="1600" />
     <option name="height" value="900" />
@@ -188,7 +206,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.appearance" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FullScreen" value="true" />
@@ -265,29 +283,38 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1758665" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32771084" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31129807" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1709943" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29326922" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32920793" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24646984" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" x="100" y="100" width="1400" height="700" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15301205" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299363" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5072289" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32771084" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24646984" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" x="100" y="100" width="1400" height="700" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15180723" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4120482" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -305,36 +332,179 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/imProc/Matrix.h</url>
-          <line>34</line>
-          <option name="timeStamp" value="35" />
+          <url>file:///usr/local/include/opencv2/core/core.hpp</url>
+          <line>1761</line>
+          <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/imProc/Image.h</url>
-          <line>111</line>
-          <option name="timeStamp" value="36" />
+          <url>file://$PROJECT_DIR$/DisplayImage.cpp</url>
+          <line>26</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/imProc/Matrix.h</url>
+          <line>52</line>
+          <option name="timeStamp" value="51" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="40" />
+      <option name="time" value="52" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="output" language="ObjectiveC" />
         <watch expression="&amp;output-&gt;_mat[30+699*67]" language="ObjectiveC" />
         <watch expression="&amp;img._mat[30+699*67]" language="ObjectiveC" />
+        <watch expression="cvMat.data" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/imProc/point.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#154#163#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#452#549#0" expanded="false" />
+            <element signature="e#572#711#0" expanded="false" />
+            <element signature="e#720#866#0" expanded="false" />
+            <element signature="e#875#1046#0" expanded="false" />
+            <element signature="e#1203#1299#0" expanded="false" />
+            <element signature="e#1419#1625#0" expanded="false" />
+            <element signature="e#1635#1811#0" expanded="false" />
+            <element signature="e#2738#2927#0" expanded="false" />
+            <element signature="e#2937#3494#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/Image.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="39" column="11" selection-start-line="36" selection-start-column="8" selection-end-line="39" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#3231#3369#0" expanded="false" />
+            <element signature="e#3378#3516#0" expanded="false" />
+            <element signature="e#3525#3663#0" expanded="false" />
+            <element signature="e#4363#5812#0" expanded="false" />
+            <element signature="e#7282#7506#0" expanded="false" />
+            <element signature="e#7516#7742#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/point.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#154#163#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#452#549#0" expanded="false" />
+            <element signature="e#572#711#0" expanded="false" />
+            <element signature="e#720#866#0" expanded="false" />
+            <element signature="e#875#1046#0" expanded="false" />
+            <element signature="e#1203#1299#0" expanded="false" />
+            <element signature="e#1419#1625#0" expanded="false" />
+            <element signature="e#1635#1811#0" expanded="false" />
+            <element signature="e#2738#2927#0" expanded="false" />
+            <element signature="e#2937#3494#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#452#549#0" expanded="false" />
+            <element signature="e#572#711#0" expanded="false" />
+            <element signature="e#720#866#0" expanded="false" />
+            <element signature="e#875#1046#0" expanded="false" />
+            <element signature="e#1203#1299#0" expanded="false" />
+            <element signature="e#1419#1625#0" expanded="false" />
+            <element signature="e#1635#1811#0" expanded="false" />
+            <element signature="e#2738#2927#0" expanded="false" />
+            <element signature="e#2937#3494#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/Image.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="55" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#3231#3369#0" expanded="false" />
+            <element signature="e#3378#3516#0" expanded="false" />
+            <element signature="e#3525#3663#0" expanded="false" />
+            <element signature="e#4363#5812#0" expanded="false" />
+            <element signature="e#7282#7506#0" expanded="false" />
+            <element signature="e#7516#7742#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DisplayImage.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="31" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/point.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#154#163#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/imProc/Image.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="48" column="66" selection-start-line="48" selection-start-column="66" selection-end-line="48" selection-end-column="66" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
-            <element signature="e#4248#5700#0" expanded="false" />
-            <element signature="e#5711#5935#0" expanded="false" />
-            <element signature="e#5945#6171#0" expanded="false" />
+            <element signature="e#3231#3369#0" expanded="false" />
+            <element signature="e#3378#3516#0" expanded="false" />
+            <element signature="e#3525#3663#0" expanded="false" />
+            <element signature="e#4363#5812#0" expanded="false" />
+            <element signature="e#7282#7506#0" expanded="false" />
+            <element signature="e#7516#7742#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -351,9 +521,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -373,11 +540,15 @@
           <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
-            <element signature="e#292#389#0" expanded="false" />
-            <element signature="e#413#517#0" expanded="false" />
-            <element signature="e#526#671#0" expanded="false" />
-            <element signature="e#680#911#0" expanded="false" />
-            <element signature="e#921#967#0" expanded="false" />
+            <element signature="e#452#549#0" expanded="false" />
+            <element signature="e#572#711#0" expanded="false" />
+            <element signature="e#720#866#0" expanded="false" />
+            <element signature="e#875#1046#0" expanded="false" />
+            <element signature="e#1203#1299#0" expanded="false" />
+            <element signature="e#1419#1625#0" expanded="false" />
+            <element signature="e#1635#1811#0" expanded="false" />
+            <element signature="e#2738#2927#0" expanded="false" />
+            <element signature="e#2937#3494#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -388,9 +559,12 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
-            <element signature="e#4248#5700#0" expanded="false" />
-            <element signature="e#5711#5935#0" expanded="false" />
-            <element signature="e#5945#6171#0" expanded="false" />
+            <element signature="e#3231#3369#0" expanded="false" />
+            <element signature="e#3378#3516#0" expanded="false" />
+            <element signature="e#3525#3663#0" expanded="false" />
+            <element signature="e#4363#5812#0" expanded="false" />
+            <element signature="e#7282#7506#0" expanded="false" />
+            <element signature="e#7516#7742#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -417,9 +591,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -442,9 +613,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -467,9 +635,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -492,9 +657,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -533,9 +695,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -558,9 +717,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -575,14 +731,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/include/opencv2/core/core.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.03482587">
-          <caret line="1698" column="7" selection-start-line="1698" selection-start-column="7" selection-end-line="1698" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -600,13 +748,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/imProc/imProc.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/imProc/Image.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -614,42 +755,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/include/opencv2/core/mat.hpp">
+    <entry file="file://$PROJECT_DIR$/imProc/Matrix.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="308" column="0" selection-start-line="308" selection-start-column="0" selection-end-line="308" selection-end-column="0" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imProc/imProc.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/opencv2/core/core.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.3333335">
+          <caret line="2419" column="25" selection-start-line="2419" selection-start-column="23" selection-end-line="2419" selection-end-column="25" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/opencv2/highgui/highgui.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3326087">
+          <caret line="189" column="22" selection-start-line="189" selection-start-column="22" selection-end-line="189" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/opencv2/core/mat.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9347826">
+          <caret line="275" column="0" selection-start-line="275" selection-start-column="0" selection-end-line="275" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DisplayImage.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3853211">
-          <caret line="14" column="49" selection-start-line="14" selection-start-column="49" selection-end-line="14" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/imProc/Matrix.cpp">
-      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#2#0" expanded="false" />
-            <element signature="e#292#389#0" expanded="false" />
-            <element signature="e#413#517#0" expanded="false" />
-            <element signature="e#526#671#0" expanded="false" />
-            <element signature="e#680#911#0" expanded="false" />
-            <element signature="e#921#967#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -663,25 +819,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DisplayImage.cpp">
+    <entry file="file://$PROJECT_DIR$/imProc/Image.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
+          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#2#0" expanded="false" />
+            <element signature="e#3231#3369#0" expanded="false" />
+            <element signature="e#3378#3516#0" expanded="false" />
+            <element signature="e#3525#3663#0" expanded="false" />
+            <element signature="e#4363#5812#0" expanded="false" />
+            <element signature="e#7282#7506#0" expanded="false" />
+            <element signature="e#7516#7742#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/imProc/Image.h">
+    <entry file="file://$PROJECT_DIR$/imProc/Matrix.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.53333336">
-          <caret line="44" column="71" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="71" />
+        <state vertical-scroll-proportion="0.39276809">
+          <caret line="23" column="35" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="35" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
-            <element signature="e#4248#5700#0" expanded="false" />
-            <element signature="e#5711#5935#0" expanded="false" />
-            <element signature="e#5945#6171#0" expanded="false" />
+            <element signature="e#452#549#0" expanded="false" />
+            <element signature="e#572#711#0" expanded="false" />
+            <element signature="e#720#866#0" expanded="false" />
+            <element signature="e#875#1046#0" expanded="false" />
+            <element signature="e#1203#1299#0" expanded="false" />
+            <element signature="e#1419#1625#0" expanded="false" />
+            <element signature="e#1635#1811#0" expanded="false" />
+            <element signature="e#2738#2927#0" expanded="false" />
+            <element signature="e#2937#3494#0" expanded="false" />
           </folding>
         </state>
       </provider>

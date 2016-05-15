@@ -17,49 +17,114 @@ namespace imProc
 {
 
 
-    template <typename T> class Image : public Matrix<T>{
+    template <typename T> class Image {
     private:
-
+        Matrix<T> _mat;
     protected:
 
     public:
 
 
-        Image( const Image& copy ) : Matrix<T>(copy) {} // copy constructor
+        Image(cv::Mat openCV_image) : _mat( openCV_image.data, openCV_image.rows, openCV_image.cols ) { }
+        // will make a deep copy of openCV_image.data.. overhead but safer.
 
-        Image(cv::Mat openCV_image) : Matrix<T>(openCV_image.rows, openCV_image.cols)
-        {
-            for(int i = 0; i < openCV_image.rows; i++)
-                for(int j = 0; j < openCV_image.cols; j++)
-                    this->set(i,j, openCV_image.col(j).row(i).data);
+        Image( std::string imgPath) : Image(_readImageCV(imgPath)) {}
+
+        Image(Matrix<T> matrix) :_mat(matrix) { }
+        // will make a deep copy of matrix... overhead but safer.
+
+        Image(int rows, int cols, const T& initVal){
+            this->mat = Matrix<T>(rows, cols, initVal);
         }
 
-        Image(int rows, int cols, const T& initVal) : Matrix<T>(rows, cols, initVal) { }
-
+        // copy constructor
+        Image( const Image& copy ) : _mat(copy._mat){ }
+        Image<T>& operator= (const Image &im) {
+            this->_mat = im._mat;
+        }
         Image<T> clone() const { return Image(*this); }
 
 
 
-        inline  cv::Mat toMatCV() const {
-            return cv::Mat(this->rows(), this->cols(), CV_8U, (void*) this->getRawMatrix() , 0);
-            // NB: We hope in Return Value Optimization (see wikipedia)
-        }
-        inline cv::Mat toMatCV_for() const
+
+
+
+
+
+
+        inline const int& rows() const { return _mat._rows; }
+        inline const int& cols() const { return _mat._cols; }
+
+
+        // ~ ~ GETTERS ~ ~
+        //2D:
+        inline const T& get (int row, int col) const { return _pmat[_index(row, col)]; }
+        inline       T  getV(int row, int col) const { return _pmat[_index(row, col)]; }
+        //1D:
+        inline const T& get (int index) const { return _pmat[index]; }
+        inline       T  getV(int index) const { return _pmat[index]; }
+        //RAW:
+        inline T* getRaw() const  { return _pmat; } // pointer to const data (immutable - read only)
+
+
+
+        // ~ ~ SETTERS ~ ~
+        //2D:
+        inline void set(int row, int col, const T& value) { _pmat[_index(row, col)] = value; }
+        //1D:
+        inline void set(int index, const T& value) { _pmat[index] = value; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        inline cv::Mat toMatCV() const  {  return this->_mat.toMatCV();  }
+//        inline cv::Mat toMatCV_for() const
+//        {
+//            cv::Mat cvMat =  cv::Mat( cv::Size(this->rows(), this->cols()), 0);
+//            for(int i = 0; i < this->rows(); i++)
+//                for(int j = 0; j < this->cols(); j++)
+//                    cvMat.row(i).col(j).data = this->get(i, j);
+//            return cvMat;
+//            // NB: We hope in Return Value Optimization (see wikipedia)
+//        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue)
         {
-            cv::Mat cvMat =  cv::Mat( cv::Size(this->rows(), this->cols()), 0);
-            for(int i = 0; i < this->rows(); i++)
-                for(int j = 0; j < this->cols(); j++)
-                    cvMat.row(i).col(j).data = this->get(i, j);
-            return cvMat;
-            // NB: We hope in Return Value Optimization (see wikipedia)
+            this->_mat = this->_mat.immersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
         }
+        Image<T> getImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue)
+        {
+            return Image<T>(_mat.immersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));
+        }
+
 
 
 
         inline void imshow(std::string msg = "") {
-            cv::Mat m = toMatCV();
+            cv::Mat m = _mat.toMatCV();
             cv::imshow(msg, m);
-            //delete m;
         }
 
 
@@ -84,17 +149,19 @@ namespace imProc
         static cv::Mat _readImageCV(std::string path)
         {
             using namespace cv;
-            Mat image = imread( path, CV_LOAD_IMAGE_GRAYSCALE); //CV_LOAD_IMAGE_GRAYSCALE);
+            Mat image =  imread( path, CV_LOAD_IMAGE_GRAYSCALE); //CV_LOAD_IMAGE_GRAYSCALE);
+
             if ( !image.data )
             {
                 // printf("No image data \n");
                 // TODO: generate exception
             }
-            return image;
+            return imread( path, CV_LOAD_IMAGE_GRAYSCALE); //CV_LOAD_IMAGE_GRAYSCALE);
         }
 
 
     public:
+        // TODO: remove this method.. deprecated! (use constructor instead)
         static Image<T> newImageCV(std::string path) {
             return Image(_readImageCV(path));
         }
@@ -146,7 +213,7 @@ namespace imProc
 
             Image output = img.clone();
 
-            for (int y = 0; y < img.rows(); y++) {
+            for (int y = 0; y < rows(); y++) {
                 for (int x = 0; x < img.cols(); x++) {
 
 

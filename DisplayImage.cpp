@@ -19,11 +19,15 @@ int main(int argc, char** argv ) {
         return -1;
     }
 
-    Image image = Image::newImageCV(argv[1]);
+
+    Image image(argv[1]);
     image.imshow("Original Image");
 
-    Image copy = image.clone();
+
+    Image copy = image.getImmersion(2,5,2,30, 0);
     copy.imshow("clone image");
+
+
 
     int rows = 6;
     int cols = 6;
@@ -42,6 +46,7 @@ int main(int argc, char** argv ) {
 
     Image closedOpened = open.closure(SE, center);
     closedOpened.imshow("Closed Opened Image");
+
 
 
     cv::waitKey(0);
