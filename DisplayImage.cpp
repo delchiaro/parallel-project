@@ -7,6 +7,8 @@
 #include "imProc/Matrix.h"
 #include "imProc/Image.h"
 
+#include <time.h>
+
 using namespace std;
 
 typedef imProc::Image<uchar> Image;
@@ -23,9 +25,10 @@ int main(int argc, char** argv ) {
     Image image(argv[1]);
     image.imshow("Original Image");
 
-    Image immersion = image.makeImmersion(10,13,20,30, 0);
-    immersion.imshow("ImmersionTest");
-
+//
+//    Image immersion = image.makeImmersion(10,13,20,30, 0);
+//    immersion.imshow("ImmersionTest");
+//
 
 
     int rows = 6;
@@ -36,6 +39,7 @@ int main(int argc, char** argv ) {
 
     Image open(image);
     open.opening(SE, center );
+
     //namedWindow("Opened Image", WINDOW_AUTOSIZE );
     open.imshow("Opened Image");
 
