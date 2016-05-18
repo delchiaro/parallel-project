@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 
+#include "TimeProfiler.h"
 
 #include "imProc/Point.h"
 #include "imProc/Matrix.h"
 #include "imProc/Image.h"
 
-#include <time.h>
 
 using namespace std;
 
@@ -37,16 +37,23 @@ int main(int argc, char** argv ) {
 
     imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
 
-    Image open(image);
-    open.opening(SE, center );
 
-    //namedWindow("Opened Image", WINDOW_AUTOSIZE );
+    TimeProfiler t;
+
+    Image open(image);
+
+    t.start();
+    open.opening(SE, center );
+    t.stop();
+    cout << "Opening: " << t << endl;
     open.imshow("Opened Image");
 
 
     Image close(image);
+    t.start();
     close.closure( SE, center );
-    //namedWindow("Closed Image", WINDOW_AUTOSIZE );
+    t.stop();
+    cout << "Closing: " << t << endl;
     close.imshow("Closed Image");
 
     open.closure(SE, center);

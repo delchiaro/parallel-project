@@ -77,14 +77,7 @@ namespace imProc
             this->_mat.immerge(topPadding, rightPadding, bottomPadding,leftPadding, borderValue);
         }
         Image<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
-            // return Image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));
-
-            long double sysTime1 = time(0);
-            Image image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));
-
-            long double sysTime2 = time(0);
-            std::cout << "\nImmersion Profiling, elapsed: " << sysTime2-sysTime1 << std::endl;
-            return image;
+            return image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));;
         }
 
 
@@ -103,7 +96,7 @@ namespace imProc
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
 
-            long double sysTime1 = time(0);
+
 
             Image copy = Image(*this);
             const int TOP_PADDING = SE_center.y();
@@ -137,8 +130,6 @@ namespace imProc
                     this->set(y, x, min);
                 }
             }
-            long double sysTime2 = time(0);
-            std::cout << "\nDilation Profiling, elapsed: " << sysTime2-sysTime1 << std::endl;
 
         }
 
@@ -182,8 +173,6 @@ namespace imProc
                     this->set(y, x, max);
                 }
             }
-            long double sysTime2 = time(0);
-            std::cout << "\nErosion Profiling, elapsed: " << sysTime2-sysTime1 << std::endl;
 
         }
 
