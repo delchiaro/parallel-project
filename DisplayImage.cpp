@@ -62,6 +62,9 @@ int main(int argc, char** argv ) {
     close.opening(SE, center);
     close.imshow("Opening on Closed Image");
 
+
+
+    cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
     cv::waitKey(0);
 
     return 0;
