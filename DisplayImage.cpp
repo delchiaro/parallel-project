@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 
+#include "TimeProfiler.h"
 
 #include "imProc/Point.h"
 #include "imProc/Matrix.h"
 #include "imProc/Image.h"
+
 
 using namespace std;
 
@@ -19,11 +21,15 @@ int main(int argc, char** argv ) {
         return -1;
     }
 
-    Image image = Image::newImageCV(argv[1]);
+
+    Image image(argv[1]);
     image.imshow("Original Image");
 
-    Image copy = image.clone();
-    copy.imshow("clone image");
+//
+//    Image immersion = image.makeImmersion(10,13,20,30, 0);
+//    immersion.imshow("ImmersionTest");
+//
+
 
     int rows = 6;
     int cols = 6;
@@ -31,18 +37,30 @@ int main(int argc, char** argv ) {
 
     imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
 
-    Image open = image.opening(SE, center );
-    //namedWindow("Opened Image", WINDOW_AUTOSIZE );
+
+    TimeProfiler t;
+
+    Image open(image);
+
+    t.start();
+    open.opening(SE, center );
+    t.stop();
+    cout << "Opening: " << t << endl;
     open.imshow("Opened Image");
 
 
-    Image closed = image.closure( SE, center );
-    //namedWindow("Closed Image", WINDOW_AUTOSIZE );
-    closed.imshow("Closed Image");
+    Image close(image);
+    t.start();
+    close.closure( SE, center );
+    t.stop();
+    cout << "Closing: " << t << endl;
+    close.imshow("Closed Image");
 
-    Image closedOpened = open.closure(SE, center);
-    closedOpened.imshow("Closed Opened Image");
+    open.closure(SE, center);
+    open.imshow("Closure on Opened Image");
 
+    close.opening(SE, center);
+    close.imshow("Opening on Closed Image");
 
     cv::waitKey(0);
 
