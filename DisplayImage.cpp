@@ -23,7 +23,6 @@ int main(int argc, char** argv ) {
 
 
     Image image(argv[1]);
-    image.imshow("Original Image");
 
 //
 //    Image immersion = image.makeImmersion(10,13,20,30, 0);
@@ -40,32 +39,29 @@ int main(int argc, char** argv ) {
 
     TimeProfiler t;
 
-    Image open(image);
-
+    Image Eroded(image);
     t.start();
-    open.opening(SE, center );
+    Eroded.erosion(SE, center );
     t.stop();
-    cout << "Opening: " << t << endl;
-    open.imshow("Opened Image");
+    cout << "Erosion: " << t << endl;
 
-
-    Image close(image);
+    Image Eroded1(image);
     t.start();
-    close.closure( SE, center );
+    Eroded.erosion(SE, center );
     t.stop();
-    cout << "Closing: " << t << endl;
-    close.imshow("Closed Image");
+    cout << "Erosion: " << t << endl;
 
-    open.closure(SE, center);
-    open.imshow("Closure on Opened Image");
-
-    close.opening(SE, center);
-    close.imshow("Opening on Closed Image");
-
+    Image Eroded2(image);
+    t.start();
+    Eroded.erosion(SE, center );
+    t.stop();
+    cout << "Erosion: " << t << endl;
 
 
-    cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
-    cv::waitKey(0);
+
+
+
+    //cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
 
     return 0;
 }

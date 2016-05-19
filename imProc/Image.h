@@ -107,6 +107,7 @@ namespace imProc
             copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 255);
             //copy.imshow("dilation immersion"); //debug
 
+            #pragma omp parallel for schedule(dynamic, 4)
             for (int y = 0; y < this->rows(); y++)
             {
                 for (int x = 0; x < this->cols(); x++)
@@ -150,6 +151,7 @@ namespace imProc
             copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 0);
             //copy.imshow("erosion immersion"); // debug
 
+            #pragma omp parallel for num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
                 for (int x = 0; x < this->cols(); x++)
