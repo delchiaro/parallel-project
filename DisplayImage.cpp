@@ -9,6 +9,7 @@
 #include "imProc/Image.h"
 
 
+
 using namespace std;
 
 typedef imProc::Image<uchar> Image;
@@ -22,8 +23,10 @@ int main(int argc, char** argv ) {
     }
 
 
+    cout << "OpenMP version: " << _OPENMP << endl;
+
     Image image(argv[1]);
-    image.imshow("Original Image");
+    //image.imshow("Original Image");
 
 //
 //    Image immersion = image.makeImmersion(10,13,20,30, 0);
@@ -40,32 +43,67 @@ int main(int argc, char** argv ) {
 
     TimeProfiler t;
 
-    Image open(image);
 
+
+//    Image dilatedd(image);
+//    t.start();
+//    dilatedd.dilation(SE, center);
+//    t.stop();
+//    cout << "Dilation: " << t << endl;
+//
+//
+//    Image dilated(image);
+//    t.start();
+//    dilated.dilation(SE, center);
+//    t.stop();
+//    cout << "Dilation: " << t << endl;
+
+    Image eroded(image);
     t.start();
-    open.opening(SE, center );
+    eroded.erosion(SE, center);
     t.stop();
-    cout << "Opening: " << t << endl;
-    open.imshow("Opened Image");
+    cout << "Erosion: " << t << endl;
 
 
-    Image close(image);
+    Image eroded1(image);
     t.start();
-    close.closure( SE, center );
+    eroded1.erosion(SE, center);
     t.stop();
-    cout << "Closing: " << t << endl;
-    close.imshow("Closed Image");
-
-    open.closure(SE, center);
-    open.imshow("Closure on Opened Image");
-
-    close.opening(SE, center);
-    close.imshow("Opening on Closed Image");
+    cout << "Erosion: " << t << endl;
 
 
+    Image eroded2(image);
+    t.start();
+    eroded2.erosion(SE, center);
+    t.stop();
+    cout << "Erosion: " << t << endl;
 
-    cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
-    cv::waitKey(0);
+
+//
+//    t.start();
+//    open.opening(SE, center );
+//    t.stop();
+//    cout << "Opening: " << t << endl;
+//    open.imshow("Opened Image");
+//
+//
+//    Image close(image);
+//    t.start();
+//    close.closure( SE, center );
+//    t.stop();
+//    cout << "Closing: " << t << endl;
+//    close.imshow("Closed Image");
+//
+//    open.closure(SE, center);
+//    open.imshow("Closure on Opened Image");
+//
+//    close.opening(SE, center);
+//    close.imshow("Opening on Closed Image");
+//
+
+
+    //cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
+   // cv::waitKey(0);
 
     return 0;
 }

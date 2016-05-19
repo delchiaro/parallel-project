@@ -13,6 +13,11 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
+#include <omp.h>
+
+
+#define RECTANGLE_KERNEL
+
 namespace imProc
 {
 
@@ -23,8 +28,7 @@ namespace imProc
 
     public:
 
-        Image(int rows, int cols, const T& initVal){
-            this->mat = Matrix<T>(rows, cols, initVal);
+        Image(int rows, int cols, const T& initVal) : _mat(rows, cols, initVal){
         }
 
         Image(const Matrix<T>& matrix) : _mat(matrix) { } // deep copy of matrix
@@ -77,7 +81,7 @@ namespace imProc
             this->_mat.immerge(topPadding, rightPadding, bottomPadding,leftPadding, borderValue);
         }
         Image<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
-            return image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));;
+            return Image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));;
         }
 
 
@@ -107,6 +111,8 @@ namespace imProc
             copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 255);
             //copy.imshow("dilation immersion"); //debug
 
+            // num_threads(20)
+            #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
                 for (int x = 0; x < this->cols(); x++)
@@ -117,13 +123,18 @@ namespace imProc
                     {
                         for (int j = 0; j < SE.cols(); j++)
                         {
+
+                            #ifndef RECTANGLE_KERNEL
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
+                            #endif
                                 const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
                                 if (current < min)
                                     min = current;
+                            #ifndef RECTANGLE_KERNEL
                             }
+                            #endif
                         }
                     }
 
@@ -150,6 +161,9 @@ namespace imProc
             copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 0);
             //copy.imshow("erosion immersion"); // debug
 
+
+            //num_threads(20)num_threads(this->rows()/8)
+            #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
                 for (int x = 0; x < this->cols(); x++)
@@ -157,16 +171,21 @@ namespace imProc
                     uchar max = copy.get(y+TOP_PADDING, x+LEFT_PADDING);
                     for (int i = 0; i < SE.rows(); i++)
                     {
+
                         for (int j = 0; j < SE.cols(); j++)
                         {
 
+                            #ifndef RECTANGLE_KERNEL
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
+                            #endif
                                 const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
                                 if (current > max)
                                     max = current;
+                            #ifndef RECTANGLE_KERNEL
                             }
+                            #endif
                         }
                     }
 

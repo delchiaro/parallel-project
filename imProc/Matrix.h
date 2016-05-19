@@ -7,7 +7,7 @@
 
 
 #include "imProc.h"
-
+#include <opencv2/opencv.hpp>
 
 
 namespace imProc {
@@ -142,7 +142,9 @@ namespace imProc {
                 cv::Mat ret(rows(), cols(), CV_8U, 0, 0);
                 for(int i = 0; i < rows() ; i++)
                     for(int j = 0; j < cols() ; j++)
+                        // TODO: debug.. error at runtime
                         *(ret.row(i).col(j).data) = this->get(i,j);
+
                 return ret;
             }
             else return cv::Mat( rows(), cols(), CV_8U, (void*) getRaw() , 0);

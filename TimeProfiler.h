@@ -5,7 +5,7 @@
 #ifndef DISPLAYIMAGE_TIMEPROFILER_H
 #define DISPLAYIMAGE_TIMEPROFILER_H
 
-
+#include <iostream>
 #include <sys/time.h>
 
 class TimeProfiler
