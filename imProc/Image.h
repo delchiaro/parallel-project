@@ -121,7 +121,8 @@ namespace imProc
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
-                                const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                const uchar& current = copy.get(y + i, x + j);
                                 if (current < min)
                                     min = current;
                             }
@@ -165,7 +166,8 @@ namespace imProc
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
-                                const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                const uchar& current = copy.get(y + i, x + j);
                                 if (current > max)
                                     max = current;
                             }

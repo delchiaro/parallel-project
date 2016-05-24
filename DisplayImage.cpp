@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdio.h>
 #include <opencv2/opencv.hpp>
 
 #include "TimeProfiler.h"
@@ -45,17 +44,25 @@ int main(int argc, char** argv ) {
     t.stop();
     cout << "Erosion: " << t << endl;
 
-    Image Eroded1(image);
-    t.start();
-    Eroded.erosion(SE, center );
-    t.stop();
-    cout << "Erosion: " << t << endl;
+    cv::Mat Display = Eroded.toMatCV();
 
-    Image Eroded2(image);
-    t.start();
-    Eroded.erosion(SE, center );
-    t.stop();
-    cout << "Erosion: " << t << endl;
+    cv::imshow("Closed Opened Image", Display);
+
+
+    cv::waitKey(0);
+
+
+//    Image Eroded1(image);
+//    t.start();
+//    Eroded1.erosion(SE, center );
+//    t.stop();
+//    cout << "Erosion: " << t << endl;
+//
+//    Image Eroded2(image);
+//    t.start();
+//    Eroded2.erosion(SE, center );
+//    t.stop();
+//    cout << "Erosion: " << t << endl;
 
 
 
