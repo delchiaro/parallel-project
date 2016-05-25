@@ -21,7 +21,7 @@ int main(int argc, char** argv ) {
     }
 
 
-    Image image(argv[1]);
+    Image image("/Users/Mr_Holmes/Development/ClionProjects/parallel-project/imgBig.jpg");
 
 //
 //    Image immersion = image.makeImmersion(10,13,20,30, 0);
@@ -29,8 +29,8 @@ int main(int argc, char** argv ) {
 //
 
 
-    int rows = 6;
-    int cols = 6;
+    int rows = 7;
+    int cols = 7;
     imProc::Matrix<bool> SE(cols, rows, true);
 
     imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
@@ -44,25 +44,25 @@ int main(int argc, char** argv ) {
     t.stop();
     cout << "Erosion: " << t << endl;
 
-    cv::Mat Display = Eroded.toMatCV();
-
-    cv::imshow("Closed Opened Image", Display);
-
-
-    cv::waitKey(0);
-
-
-//    Image Eroded1(image);
-//    t.start();
-//    Eroded1.erosion(SE, center );
-//    t.stop();
-//    cout << "Erosion: " << t << endl;
+//    cv::Mat Display = Eroded.toMatCV();
 //
-//    Image Eroded2(image);
-//    t.start();
-//    Eroded2.erosion(SE, center );
-//    t.stop();
-//    cout << "Erosion: " << t << endl;
+//    cv::imshow("Closed Opened Image", Display);
+//
+//
+//    cv::waitKey(0);
+
+
+    Image Eroded1(image);
+    t.start();
+    Eroded1.erosion(SE, center );
+    t.stop();
+    cout << "Erosion: " << t << endl;
+
+    Image Eroded2(image);
+    t.start();
+    Eroded2.erosion(SE, center );
+    t.stop();
+    cout << "Erosion: " << t << endl;
 
 
 

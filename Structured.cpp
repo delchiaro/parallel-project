@@ -10,7 +10,7 @@
 using namespace cv;
 using namespace std;
 
-//Si assume un kernel con dimensioni m*n, con m,n dispari
+// Si assume un kernel con dimensioni m*n, con m,n dispari
 Mat immerge(const Mat& img , int paddingTop , int paddingLeft , int initValue){
 
     Mat immergedImg;
@@ -29,7 +29,9 @@ Mat immerge(const Mat& img , int paddingTop , int paddingLeft , int initValue){
 
 };
 
-Mat dilation(const Mat& img , const Mat& SE){
+// In entrambe le funzioni la computazione viene eseguita su immergedImg e viene scritto il risultato in img
+
+Mat dilation(Mat& img , const Mat& SE){
 
     int paddingTop = floor(SE.cols/2);
     int paddingLeft = floor(SE.rows/2);
@@ -55,21 +57,22 @@ Mat dilation(const Mat& img , const Mat& SE){
                 }
             }
 
-            immergedImg.at<uchar>(y,x) = min;
+            img.at<uchar>(y,x) = min;
         }
     }
 
-    return immergedImg;
+    return img;
 
 };
 
-Mat erosion(const Mat& img , const Mat& SE){
+Mat erosion(Mat& img , const Mat& SE){
 
     int paddingTop = floor(SE.cols/2);
     int paddingLeft = floor(SE.rows/2);
 
     Mat immergedImg = immerge(img, paddingTop, paddingLeft, 0);
 
+    #pragma omp parallel for num_threads(img.rows/8)
     for(int y = 0; y < img.rows; y++)
     {
         for(int x = 0; x < img.cols; x++)
@@ -80,7 +83,7 @@ Mat erosion(const Mat& img , const Mat& SE){
             {
                 for(int j = 0; j < SE.cols; j++)
                 {
-                    if(SE.at<bool>(i,j) == 1)
+                    if(SE.at<bool>(i,j) == true)
                     {
                         const uchar& current = immergedImg.at<uchar>(y+i, x+j);
                         if (current > max)
@@ -89,11 +92,11 @@ Mat erosion(const Mat& img , const Mat& SE){
                 }
             }
 
-            immergedImg.at<uchar>(y,x) = max;
+            img.at<uchar>(y, x) = max;
         }
     }
 
-    return immergedImg;
+    return img;
 
 };
 
@@ -101,8 +104,8 @@ int main(int argc, char** argv){
 
     Mat img = imread("/Users/Mr_Holmes/Development/ClionProjects/parallel-project/imgBig.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 
-    int rows = 5;
-    int cols = 5;
+    int rows = 7;
+    int cols = 7;
 
     const Mat SE = Mat(rows, cols, CV_8U, true);
 
@@ -114,10 +117,20 @@ int main(int argc, char** argv){
     t.stop();
     cout << "Erosion: " << t << endl;
 
-    imshow("Eroded Image", eroded);
+    Mat eroded1;
+    t.start();
+    eroded1 = erosion(img, SE);
+    t.stop();
+    cout << "Erosion: " << t << endl;
 
+    Mat eroded2;
+    t.start();
+    eroded2 = erosion(img, SE);
+    t.stop();
+    cout << "Erosion: " << t << endl;
 
-    waitKey(0);
-
+//    imshow("Eroded Image", eroded);
+//
+//    waitKey(0);
 
 }

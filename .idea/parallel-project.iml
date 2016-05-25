@@ -11,9 +11,9 @@
       <sourceFolder url="file://$MODULE_DIR$/imProc/Image.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/imProc/point.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/imProc/imProc.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Sequential.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/TimeProfiler.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Structured.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

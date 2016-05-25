@@ -3,7 +3,7 @@ project(parallel_project)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp")
 
-set(SOURCE_FILES Sequential.cpp imProc/Matrix.cpp imProc/Matrix.h imProc/Image.cpp imProc/Image.h imProc/point.cpp imProc/point.h imProc/imProc.h TimeProfiler.cpp TimeProfiler.h)
+set(SOURCE_FILES Structured.cpp imProc/Matrix.cpp imProc/Matrix.h imProc/Image.cpp imProc/Image.h imProc/point.cpp imProc/point.h imProc/imProc.h TimeProfiler.cpp TimeProfiler.h)
 add_executable(parallel_project ${SOURCE_FILES})
 
 project( DisplayImage )
@@ -11,7 +11,7 @@ find_package( OpenCV REQUIRED )
 add_executable( DisplayImage DisplayImage.cpp)
 target_link_libraries( DisplayImage ${OpenCV_LIBS} )
 
-project(Sequential)
+project(Structured)
 find_package( OpenCV REQUIRED )
-add_executable(Sequential Sequential.cpp)
-target_link_libraries( Sequential ${OpenCV_LIBS} )
+add_executable(Structured Structured.cpp)
+target_link_libraries( Structured ${OpenCV_LIBS} )
