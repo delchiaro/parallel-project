@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdio.h>
 #include <opencv2/opencv.hpp>
 
 #include "TimeProfiler.h"
@@ -25,8 +24,7 @@ int main(int argc, char** argv ) {
 
     cout << "OpenMP version: " << _OPENMP << endl;
 
-    Image image(argv[1]);
-    //image.imshow("Original Image");
+    Image image("/Users/Mr_Holmes/Development/ClionProjects/parallel-project/imgBig.jpg");
 
 //
 //    Image immersion = image.makeImmersion(10,13,20,30, 0);
@@ -34,8 +32,8 @@ int main(int argc, char** argv ) {
 //
 
 
-    int rows = 6;
-    int cols = 6;
+    int rows = 7;
+    int cols = 7;
     imProc::Matrix<bool> SE(cols, rows, true);
 
     imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
@@ -58,25 +56,32 @@ int main(int argc, char** argv ) {
 //    t.stop();
 //    cout << "Dilation: " << t << endl;
 
-    Image eroded(image);
+    Image Eroded(image);
     t.start();
-    eroded.erosion(SE, center);
+    Eroded.erosion(SE, center );
     t.stop();
     cout << "Erosion: " << t << endl;
 
+//    cv::Mat Display = Eroded.toMatCV();
+//
+//    cv::imshow("Closed Opened Image", Display);
+//
+//
+//    cv::waitKey(0);
 
-    Image eroded1(image);
+
+    Image Eroded1(image);
     t.start();
-    eroded1.erosion(SE, center);
+    Eroded1.erosion(SE, center );
     t.stop();
     cout << "Erosion: " << t << endl;
 
-
-    Image eroded2(image);
+    Image Eroded2(image);
     t.start();
-    eroded2.erosion(SE, center);
+    Eroded2.erosion(SE, center );
     t.stop();
     cout << "Erosion: " << t << endl;
+
 
 
 //
@@ -101,9 +106,9 @@ int main(int argc, char** argv ) {
 //    close.imshow("Opening on Closed Image");
 //
 
-
     //cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
    // cv::waitKey(0);
+
 
     return 0;
 }

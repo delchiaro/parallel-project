@@ -8,6 +8,10 @@
 #include <iostream>
 #include <sys/time.h>
 
+
+#ifndef DST_NONE
+    #define DST_NONE 0 // for linux ubuntu ..
+#endif
 class TimeProfiler
 {
 private:

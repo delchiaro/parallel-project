@@ -9,7 +9,7 @@
 #include "imProc.h"
 
 #include "Matrix.h"
-#include "point.h"
+#include "Point.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
@@ -112,6 +112,7 @@ namespace imProc
             //copy.imshow("dilation immersion"); //debug
 
             // num_threads(20)
+            // #pragma omp parallel for schedule(dynamic, 4)
             #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
@@ -128,8 +129,10 @@ namespace imProc
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
+<<<<<<< HEAD
                             #endif
-                                const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                const uchar& current = copy.get(y + i, x + j);
                                 if (current < min)
                                     min = current;
                             #ifndef RECTANGLE_KERNEL
@@ -161,8 +164,8 @@ namespace imProc
             copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 0);
             //copy.imshow("erosion immersion"); // debug
 
-
             //num_threads(20)num_threads(this->rows()/8)
+            // #pragma omp parallel for num_threads(this->rows()/8)
             #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
@@ -179,8 +182,10 @@ namespace imProc
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
+<<<<<<< HEAD
                             #endif
-                                const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                const uchar& current = copy.get(y + i, x + j);
                                 if (current > max)
                                     max = current;
                             #ifndef RECTANGLE_KERNEL
