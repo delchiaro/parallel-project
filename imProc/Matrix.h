@@ -9,12 +9,14 @@
 #include "imProc.h"
 #include <opencv2/opencv.hpp>
 
-
 namespace imProc {
+
 
 
     template<class T> class Matrix
     {
+        #define _INDEX(row, col) (col + row * _cols)
+
     private:
         int _rows;
         int _cols;
@@ -27,8 +29,9 @@ namespace imProc {
         }
 
     protected:
+        __forceinline
         inline int _index(int row, int col) const {
-            return col + row * this->_cols;
+            return col + row * _cols;
         }
 
     public:
@@ -92,22 +95,22 @@ namespace imProc {
 
 
 
-        inline const int& rows() const { return this->_rows; }
-        inline const int& cols() const { return this->_cols; }
+        __forceinline inline const int& rows() const { return this->_rows; }
+        __forceinline inline const int& cols() const { return this->_cols; }
 
 
         // ~ ~ GETTERS ~ ~
-        inline const T& get (int row, int col)  const { return _pmat[_index(row, col)]; }
-        inline       T  getV(int row, int col)  const { return _pmat[_index(row, col)]; }
-        inline const T& get (int index)         const { return _pmat[index]; }
-        inline       T  getV(int index)         const { return _pmat[index]; }
-        inline       T* getRaw() const  { return _pmat; } // pointer to const data (immutable - read only)
+        __forceinline inline const T& get (int row, int col)  const { return _pmat[_index(row, col)]; }
+        __forceinline inline       T  getV(int row, int col)  const { return _pmat[_index(row, col)]; }
+        __forceinline inline const T& get (int index)         const { return _pmat[index]; }
+        __forceinline inline       T  getV(int index)         const { return _pmat[index]; }
+        __forceinline inline       T* getRaw() const  { return _pmat; } // pointer to const data (immutable - read only)
 
 
 
         // ~ ~ SETTERS ~ ~
-        inline void set(int row, int col, const T& value)   { _pmat[_index(row, col)] = value; }
-        inline void set(int index, const T& value)          { _pmat[index] = value; }
+        __forceinline inline void set(int row, int col, const T& value)   { _pmat[_index(row, col)] = value; }
+        __forceinline inline void set(int index, const T& value)          { _pmat[index] = value; }
 
 
 

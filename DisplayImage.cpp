@@ -23,23 +23,69 @@ int main(int argc, char** argv ) {
 
 
     cout << "OpenMP version: " << _OPENMP << endl;
+    cout << "Object Oriented Version. " << endl;
 
-    Image image("/Users/Mr_Holmes/Development/ClionProjects/parallel-project/imgBig.jpg");
+    Image image(argv[1]);
 
-//
-//    Image immersion = image.makeImmersion(10,13,20,30, 0);
-//    immersion.imshow("ImmersionTest");
-//
+
 
 
     int rows = 7;
     int cols = 7;
     imProc::Matrix<bool> SE(cols, rows, true);
-
     imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
 
 
     TimeProfiler t;
+
+    Image eroded1(image);
+    t.start();
+    eroded1.erosion(SE, center );
+    t.stop();
+    cout << "Erosion: " << t << endl;
+
+
+    Image eroded2(image);
+    t.start();
+    eroded2.erosion(SE, center );
+    t.stop();
+    cout << "Erosion: " << t << endl;
+
+    Image eroded3(image);
+    t.start();
+    eroded3.erosion(SE, center );
+    t.stop();
+    cout << "Erosion: " << t << endl;
+
+
+
+    Image bench(image);
+    t.start();
+    for( int i = 0; i < 10; i++ )
+    {
+        bench.erosion(SE, center);
+    }
+    t.stop();
+    cout << "Bench (erosion x 100): " << t << endl;
+
+
+
+    /*
+    cout << endl << endl;
+    image.imshow("Original");
+    eroded1.imshow("Erosion1");
+    cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
+
+    cv::waitKey(0);
+    */
+
+    return 0;
+}
+
+
+
+//    Image immersion = image.makeImmersion(10,13,20,30, 0);
+//    immersion.imshow("ImmersionTest");
 
 
 
@@ -56,11 +102,6 @@ int main(int argc, char** argv ) {
 //    t.stop();
 //    cout << "Dilation: " << t << endl;
 
-    Image Eroded(image);
-    t.start();
-    Eroded.erosion(SE, center );
-    t.stop();
-    cout << "Erosion: " << t << endl;
 
 //    cv::Mat Display = Eroded.toMatCV();
 //
@@ -68,21 +109,6 @@ int main(int argc, char** argv ) {
 //
 //
 //    cv::waitKey(0);
-
-
-    Image Eroded1(image);
-    t.start();
-    Eroded1.erosion(SE, center );
-    t.stop();
-    cout << "Erosion: " << t << endl;
-
-    Image Eroded2(image);
-    t.start();
-    Eroded2.erosion(SE, center );
-    t.stop();
-    cout << "Erosion: " << t << endl;
-
-
 
 //
 //    t.start();
@@ -106,11 +132,5 @@ int main(int argc, char** argv ) {
 //    close.imshow("Opening on Closed Image");
 //
 
-    //cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
-   // cv::waitKey(0);
-
-
-    return 0;
-}
 
 

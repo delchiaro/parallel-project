@@ -19,6 +19,7 @@ private:
     bool running = false;
     bool resetted = true;
     long sec;
+    long msec;
     long long usec;
 public:
     TimeProfiler(bool start_now = false) {
@@ -52,6 +53,9 @@ public:
                 usec += 1000000;
                 sec  -=1;
             }
+
+            msec = usec/1000;
+            usec -= msec*1000;
             running = false;
         }
     }
@@ -77,12 +81,23 @@ public:
             return -1;
         else return usec;
     }
+    /**
+    * @return: -1 if profiler has never been started
+    */
+    inline long long getMsec() const
+    {
+        if(resetted || running)
+            return -1;
+        else return msec;
+    }
 
 };
 
 
 std::ostream &operator<<(std::ostream &os, TimeProfiler const &m) {
-    return os << m.getSec() << "s\t" << m.getUsec() << "uS";
+    //return os << m.getSec() << "s\t" << m.getUsec() << "uS";
+    return os << m.getSec() << "s\t" << m.getMsec() << "mS\t" << m.getUsec() << "uS";
+
 }
 
 

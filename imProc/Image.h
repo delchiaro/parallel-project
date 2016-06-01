@@ -59,16 +59,16 @@ namespace imProc
 
 
         // ~ ~ GETTERS ~ ~
-        inline const T&     get (int row, int col)  const { return _mat.get(row, col);   }
-        inline const T&     get (int index)         const { return _mat.get(index);      }
-        inline       T      getV(int row, int col)  const { return _mat.get(row, col);   }
-        inline       T      getV(int index)         const { return _mat.get(index);      }
-        inline Matrix<T>    getMatrix()             const { return _mat;                 }
+        __forceinline inline const T&     get (int row, int col)  const { return _mat.get(row, col);   }
+        __forceinline inline const T&     get (int index)         const { return _mat.get(index);      }
+        __forceinline inline       T      getV(int row, int col)  const { return _mat.get(row, col);   }
+        __forceinline inline       T      getV(int index)         const { return _mat.get(index);      }
+        __forceinline inline Matrix<T>    getMatrix()             const { return _mat;                 }
 
 
         // ~ ~ SETTERS ~ ~
-        inline void         set(int row, int col, const T& value)   { _mat.set(row, col, value); }
-        inline void         set(int index, const T& value)          { _mat.set(index, value); }
+        __forceinline inline void         set(int row, int col, const T& value)   { _mat.set(row, col, value); }
+        __forceinline inline void         set(int index, const T& value)          { _mat.set(index, value); }
 
 
 
@@ -76,11 +76,11 @@ namespace imProc
 
 
 
-        void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+        __forceinline inline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             //this->_mat = _mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
             this->_mat.immerge(topPadding, rightPadding, bottomPadding,leftPadding, borderValue);
         }
-        Image<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+        __forceinline inline Image<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             return Image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));;
         }
 
@@ -116,12 +116,15 @@ namespace imProc
             #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
+                int y_TOP_PADD = y+TOP_PADDING;//optimization
+
                 for (int x = 0; x < this->cols(); x++)
                 {
-                    uchar min = copy.get(y+TOP_PADDING, x+LEFT_PADDING);
+                    uchar min = copy.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
 
                     for (int i = 0; i < SE.rows(); i++)
                     {
+                        int yi = y + i;
                         for (int j = 0; j < SE.cols(); j++)
                         {
 
@@ -129,10 +132,9 @@ namespace imProc
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
-<<<<<<< HEAD
                             #endif
                                 //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
-                                const uchar& current = copy.get(y + i, x + j);
+                                const uchar current = copy.get(yi, x + j);
                                 if (current < min)
                                     min = current;
                             #ifndef RECTANGLE_KERNEL
@@ -164,16 +166,20 @@ namespace imProc
             copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 0);
             //copy.imshow("erosion immersion"); // debug
 
+
             //num_threads(20)num_threads(this->rows()/8)
             // #pragma omp parallel for num_threads(this->rows()/8)
             #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
             for (int y = 0; y < this->rows(); y++)
             {
+                int y_TOP_PADD = y+TOP_PADDING;//optimization
                 for (int x = 0; x < this->cols(); x++)
                 {
-                    uchar max = copy.get(y+TOP_PADDING, x+LEFT_PADDING);
+                    uchar max = copy.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
+
                     for (int i = 0; i < SE.rows(); i++)
                     {
+                        int yi = y+i; // optimization
 
                         for (int j = 0; j < SE.cols(); j++)
                         {
@@ -182,10 +188,8 @@ namespace imProc
                             //TODO: make function version without this check - optimization for rectangular SE
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
-<<<<<<< HEAD
                             #endif
-                                //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
-                                const uchar& current = copy.get(y + i, x + j);
+                                const uchar current = copy.get(yi, x + j); //optimization
                                 if (current > max)
                                     max = current;
                             #ifndef RECTANGLE_KERNEL

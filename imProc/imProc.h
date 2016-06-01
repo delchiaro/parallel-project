@@ -5,6 +5,8 @@
 #ifndef DISPLAYIMAGE_IMPROC_H
 #define DISPLAYIMAGE_IMPROC_H
 
+#define __forceinline __attribute__((always_inline))
+
 typedef unsigned char uchar;
 typedef unsigned int uint;
 

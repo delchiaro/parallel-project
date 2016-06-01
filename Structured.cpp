@@ -30,7 +30,6 @@ Mat immerge(const Mat& img , int paddingTop , int paddingLeft , int initValue){
 };
 
 // In entrambe le funzioni la computazione viene eseguita su immergedImg e viene scritto il risultato in img
-
 Mat dilation(Mat& img , const Mat& SE){
 
     int paddingTop = floor(SE.cols/2);
@@ -102,7 +101,16 @@ Mat erosion(Mat& img , const Mat& SE){
 
 int main(int argc, char** argv){
 
-    Mat img = imread("/Users/Mr_Holmes/Development/ClionProjects/parallel-project/imgBig.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    if ( argc != 2 )
+    {
+        printf("Usage: DisplayImage.out <Image_Path>\n");
+        return -1;
+    }
+
+    cout << "OpenMP version: " << _OPENMP << endl;
+    cout << "Structured Version. " << endl;
+
+    Mat img = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 
     int rows = 7;
     int cols = 7;
@@ -128,6 +136,17 @@ int main(int argc, char** argv){
     eroded2 = erosion(img, SE);
     t.stop();
     cout << "Erosion: " << t << endl;
+
+
+    Mat bench;
+    t.start();
+    for( int i = 0; i < 10; i++ )
+    {
+        erosion(img, SE);
+    }
+    t.stop();
+    cout << "Bench (erosion x 100): " << t << endl;
+
 
 //    imshow("Eroded Image", eroded);
 //
