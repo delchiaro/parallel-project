@@ -10,94 +10,16 @@
 using namespace cv;
 using namespace std;
 
-// Si assume un kernel con dimensioni m*n, con m,n dispari
-Mat immerge(const Mat& img , int paddingTop , int paddingLeft , int initValue){
+#define INDEX(row, col, cols) (col + row * cols)
 
-    Mat immergedImg;
 
-    immergedImg = Mat(img.rows + 2*paddingTop , img.cols + 2*paddingLeft , CV_8UC1, initValue);
 
-    for(int i = 0; i < img.rows; i++)
-    {
-        for(int j = 0; j < img.cols; j++)
-        {
-            immergedImg.at<uchar>(i + paddingTop , j + paddingLeft) = img.at<uchar>(i,j);
-        }
-    }
-
-    return immergedImg;
-
-};
-
-// In entrambe le funzioni la computazione viene eseguita su immergedImg e viene scritto il risultato in img
-Mat dilation(Mat& img , const Mat& SE){
-
-    int paddingTop = floor(SE.cols/2);
-    int paddingLeft = floor(SE.rows/2);
-
-    Mat immergedImg = immerge(img, paddingTop, paddingLeft, 255);
-
-    for(int y = 0; y < img.rows; y++)
-    {
-        for(int x = 0; x < img.cols; x++)
-        {
-            uchar min = immergedImg.at<uchar>(y + paddingTop, x + paddingLeft);
-
-            for(int i = 0; i < SE.rows; i++)
-            {
-                for(int j = 0; j < SE.cols; j++)
-                {
-                    if(SE.at<bool>(i,j) == 1)
-                    {
-                        const uchar& current = immergedImg.at<uchar>(y+i, x+j);
-                        if (current < min)
-                            min = current;
-                    }
-                }
-            }
-
-            img.at<uchar>(y,x) = min;
-        }
-    }
-
-    return img;
-
-};
-
-Mat erosion(Mat& img , const Mat& SE){
-
-    int paddingTop = floor(SE.cols/2);
-    int paddingLeft = floor(SE.rows/2);
-
-    Mat immergedImg = immerge(img, paddingTop, paddingLeft, 0);
-
-    #pragma omp parallel for num_threads(img.rows/8)
-    for(int y = 0; y < img.rows; y++)
-    {
-        for(int x = 0; x < img.cols; x++)
-        {
-            uchar max = immergedImg.at<uchar>(y + paddingTop, x + paddingLeft);
-
-            for(int i = 0; i < SE.rows; i++)
-            {
-                for(int j = 0; j < SE.cols; j++)
-                {
-                    if(SE.at<bool>(i,j) == true)
-                    {
-                        const uchar& current = immergedImg.at<uchar>(y+i, x+j);
-                        if (current > max)
-                            max = current;
-                    }
-                }
-            }
-
-            img.at<uchar>(y, x) = max;
-        }
-    }
-
-    return img;
-
-};
+inline uchar* newImg(int rows, int cols, uchar initval = 0);
+inline uchar* cloneImg(const uchar* img, int rows, int cols);
+uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , int initValue);
+void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols);
+void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols);
+void imshow(string message, uchar* img, int rows, int cols);
 
 int main(int argc, char** argv){
 
@@ -110,46 +32,255 @@ int main(int argc, char** argv){
     cout << "OpenMP version: " << _OPENMP << endl;
     cout << "Structured Version. " << endl;
 
-    Mat img = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    Mat imgCV = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    int m = imgCV.rows;
+    int n = imgCV.cols;
+    uchar* img = imgCV.data;
 
-    int rows = 7;
-    int cols = 7;
 
-    const Mat SE = Mat(rows, cols, CV_8U, true);
+    int seRows = 7;
+    int seCols = 7;
+    #define RECTANGLE_KERNEL_OPTIMIZATION
+    // se definito, viene ottimizzata la compilazione di erosion e dilation per supportare solo kernel rettangolari.
+
+
+    const uchar* SE =  newImg(seRows, seCols, 1);
 
     TimeProfiler t;
 
-    Mat eroded;
     t.start();
-    eroded = erosion(img, SE);
+    erosion(img, m, n, SE, seRows, seCols);
+    t.stop();
+    cout << "Erosion: " << t << endl;
+    //imshow("erodedImg", img, m, n);
+
+    t.start();
+    erosion(img, m, n, SE, seRows, seCols);
     t.stop();
     cout << "Erosion: " << t << endl;
 
-    Mat eroded1;
     t.start();
-    eroded1 = erosion(img, SE);
-    t.stop();
-    cout << "Erosion: " << t << endl;
-
-    Mat eroded2;
-    t.start();
-    eroded2 = erosion(img, SE);
+    erosion(img, m, n, SE, seRows, seCols);
     t.stop();
     cout << "Erosion: " << t << endl;
 
 
-    Mat bench;
     t.start();
-    for( int i = 0; i < 10; i++ )
+    for( int i = 0; i < 50; i++ )
     {
-        erosion(img, SE);
+        erosion(img, m, n, SE, seRows, seCols);
     }
     t.stop();
     cout << "Bench (erosion x 100): " << t << endl;
 
 
-//    imshow("Eroded Image", eroded);
 //
-//    waitKey(0);
+//    waitKey
 
+    delete[] SE;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void imshow(string message,  uchar* img, int rows, int cols){
+    cv::Mat cvImg(rows, cols, CV_8U, img);
+    imshow(message, cvImg);
+}
+
+inline uchar* newImg(int rows, int cols, uchar initval)
+{
+    uchar* img = new uchar[rows * cols];
+    for(int i = 0; i < rows * cols ; i++)
+        img[i] = initval;
+    return img;
+}
+
+inline uchar* cloneImg(const uchar* img, int rows, int cols)
+{
+    uchar* clone = new uchar[rows * cols];
+    for(int i = 0; i < rows * cols ; i++)
+        clone[i] = img[i];
+    return clone;
+}
+
+// Si assume un kernel con dimensioni m*n, con m,n dispari
+uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , int initValue)
+{
+    const int immergRows = rows + 2*paddingTop;
+    const int immergCols = cols + 2*paddingLeft;
+
+    uchar* immergedImg = newImg(immergRows, immergCols, initValue);
+
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+            immergedImg[INDEX( i + paddingTop , j + paddingLeft, immergCols) ] = img[INDEX(i, j, cols) ];
+
+    }
+
+    return immergedImg;
+}
+
+
+//#define SUPER_OPT // in debug riesco a guadagnare circa 1 o mezzo secondo.. (su 50 iterazioni, circa 24.5 - 25 secondi)
+                    //in release perdo 2 secondi (su 100 iterazioni, circa 18 secondi)
+
+
+
+// la computazione viene eseguita su immergedImg e viene scritto il risultato in img
+void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
+{
+
+    int paddingTop = floor(seCols/2);
+    int paddingLeft = floor(seRows/2);
+
+    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
+    #ifdef SUPER_OPT
+        int xj_row_index = 0;
+        int xj_row_index_limit=0;
+    #endif
+
+#pragma omp parallel for num_threads(rows/8)
+    for(int y = 0; y < rows; y++)
+    {
+        for(int x = 0; x < cols; x++)
+        {
+            uchar min = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+
+
+            for(int i = 0; i < seRows; i++)
+            {
+
+                #ifdef SUPER_OPT
+                xj_row_index = x + (y+i) * cols;
+                xj_row_index_limit = xj_row_index + seCols;
+                for( ; xj_row_index < xj_row_index_limit; xj_row_index++)
+                #else
+                const int yi = y+i;
+                for(int j = 0; j < seCols; j++)
+                #endif
+                {
+
+                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                    if(SE[INDEX(i,j, seCols)]  == 1)
+                    {
+                #endif
+                    #ifdef SUPER_OPT
+                    const uchar current = immergedImg[xj_row_index];
+                    #else
+                    const uchar& current = immergedImg[INDEX(yi, x+j, cols)];
+                    #endif
+                    if (current < min)
+                        min = current;
+
+                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                    }
+                #endif
+                }
+            }
+
+            img[INDEX(y, x, cols)] = min;
+        }
+    }
+    delete[] immergedImg;
+
+    return ;
+}
+
+
+
+// la computazione viene eseguita su immergedImg e viene scritto il risultato in img
+void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
+{
+
+    int paddingTop = floor(seCols/2);
+    int paddingLeft = floor(seRows/2);
+
+    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 0);
+
+#pragma omp parallel for num_threads(rows/8)
+    for(int y = 0; y < rows; y++)
+    {
+        for(int x = 0; x < cols; x++)
+        {
+            uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+
+            for(int i = 0; i < seRows; i++)
+            {
+
+
+                #ifdef SUPER_OPT
+                    const int rowIndex = (y+i) * cols;
+                    int xj_row_index = x + rowIndex;
+                    for(int j = 0; j < seCols; xj_row_index++, j++)
+                #else
+                    const int yi = y+i;
+                    for(int j = 0; j < seCols; j++)
+                #endif
+                    {
+
+                    #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                        if(SE[INDEX(i,j, seCols)]  == 1)
+                        {
+                    #endif
+                    #ifdef SUPER_OPT
+                        const uchar current = immergedImg[xj_row_index];
+                    #else
+                        const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                    #endif
+                        if (current < max)
+                            max = current;
+
+                    #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                        }
+                    #endif
+
+                    }
+
+
+            }
+
+            img[INDEX(y, x, cols)] = max;
+        }
+    }
+
+    delete[] immergedImg;
 }
