@@ -16,7 +16,7 @@
 #include <omp.h>
 
 
-#define RECTANGLE_KERNEL
+#define RECTANGLE_KERNEL_OPTIMIZATION
 
 namespace imProc
 {
@@ -37,14 +37,14 @@ namespace imProc
 
 
         // Copy, Assignmnet, Move
-        Image( const Image& copy ) : _mat(copy._mat){}
-        Image<T>& operator= (const Image &im) {
-            this->_mat = im._mat;
+        __forceinline inline Image( const Image& copy ) : _mat(copy._mat){}
+        __forceinline inline Image<T>& operator= (const Image &im) {
+            _mat = im._mat;
         }
-        Image(Image&& move ) :  _mat(std::move(move._mat)) {
+        __forceinline inline Image(Image&& move ) :  _mat(std::move(move._mat)) {
         }
-        Image<T>& operator= (Image&& move) {
-            this->_mat = std::move(move._mat);
+        __forceinline inline Image<T>& operator= (Image&& move) {
+            _mat = std::move(move._mat);
         }
 
 
@@ -54,8 +54,8 @@ namespace imProc
 
 
 
-        inline const int&   rows()  const { return _mat.rows(); }
-        inline const int&   cols()  const { return _mat.cols(); }
+        __forceinline inline const int&   rows()  const { return _mat.rows(); }
+        __forceinline inline const int&   cols()  const { return _mat.cols(); }
 
 
         // ~ ~ GETTERS ~ ~
@@ -78,7 +78,7 @@ namespace imProc
 
         __forceinline inline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             //this->_mat = _mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
-            this->_mat.immerge(topPadding, rightPadding, bottomPadding,leftPadding, borderValue);
+           _mat.immerge(topPadding, rightPadding, bottomPadding,leftPadding, borderValue);
         }
         __forceinline inline Image<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             return Image(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));;
@@ -95,32 +95,29 @@ namespace imProc
 
 
 
-        void dilation(const Matrix<bool>& SE, const Point<int>& SE_center)
+        void erosion(const Matrix<bool>& SE, const Point<int>& SE_center)
         {
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
 
-
-
-            Image copy = Image(*this);
             const int TOP_PADDING = SE_center.y();
             const int BOTTOM_PADDING = SE.rows() - SE_center.y();
             const int LEFT_PADDING = SE_center.x();
             const int RIGHT_PADDING = SE.cols() - SE_center.x();;
 
-            copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 255);
-            //copy.imshow("dilation immersion"); //debug
+            Image immersion = makeImmersion(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 255);
+            //immersion.imshow("dilation immersion"); //debug
 
             // num_threads(20)
             // #pragma omp parallel for schedule(dynamic, 4)
-            #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
-            for (int y = 0; y < this->rows(); y++)
+            #pragma omp parallel for num_threads(this->rows()/8)
+            for (int y = 0; y < rows(); y++)
             {
                 int y_TOP_PADD = y+TOP_PADDING;//optimization
 
-                for (int x = 0; x < this->cols(); x++)
+                for (int x = 0; x < cols(); x++)
                 {
-                    uchar min = copy.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
+                    uchar min = immersion.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
 
                     for (int i = 0; i < SE.rows(); i++)
                     {
@@ -128,29 +125,28 @@ namespace imProc
                         for (int j = 0; j < SE.cols(); j++)
                         {
 
-                            #ifndef RECTANGLE_KERNEL
-                            //TODO: make function version without this check - optimization for rectangular SE
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
                             #endif
                                 //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
-                                const uchar current = copy.get(yi, x + j);
+                                const uchar current = immersion.get(yi, x + j);
                                 if (current < min)
                                     min = current;
-                            #ifndef RECTANGLE_KERNEL
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                             }
                             #endif
                         }
                     }
 
-                    this->set(y, x, min);
+                    set(y, x, min);
                 }
             }
 
         }
 
 
-        void erosion(const Matrix<bool>& SE, const Point<int>& SE_center)
+        void dilation(const Matrix<bool>& SE, const Point<int>& SE_center)
         {
             //CV_Assert(bw_SE.depth() == CV_8U);  // accept only uchar Structuring Elements
             //CV_Assert(img.depth() == CV_8U);  // accept only uchar images
@@ -163,19 +159,19 @@ namespace imProc
             const int LEFT_PADDING = SE_center.x();
             const int RIGHT_PADDING = SE.cols() - SE_center.x();;
 
-            copy.immerge(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 0);
-            //copy.imshow("erosion immersion"); // debug
+            Image immersion = makeImmersion(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 255);
+            //immersion.imshow("erosion immersion"); // debug
 
 
             //num_threads(20)num_threads(this->rows()/8)
             // #pragma omp parallel for num_threads(this->rows()/8)
-            #pragma omp parallel for shared(copy) num_threads(this->rows()/8)
-            for (int y = 0; y < this->rows(); y++)
+            #pragma omp parallel for  num_threads(this->rows()/8)
+            for (int y = 0; y < rows(); y++)
             {
                 int y_TOP_PADD = y+TOP_PADDING;//optimization
-                for (int x = 0; x < this->cols(); x++)
+                for (int x = 0; x < cols(); x++)
                 {
-                    uchar max = copy.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
+                    uchar max = immersion.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
 
                     for (int i = 0; i < SE.rows(); i++)
                     {
@@ -184,21 +180,21 @@ namespace imProc
                         for (int j = 0; j < SE.cols(); j++)
                         {
 
-                            #ifndef RECTANGLE_KERNEL
-                            //TODO: make function version without this check - optimization for rectangular SE
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                             if (SE.get(i, j) == true)// if SE[i][j]==1, apply the mask:
                             {
                             #endif
-                                const uchar current = copy.get(yi, x + j); //optimization
+                                //const uchar& current = copy.get(y + (i-SE_center.y()) + TOP_PADDING, x +  (j-SE_center.x()) + LEFT_PADDING);
+                                const uchar current = immersion.get(yi, x + j); //optimization
                                 if (current > max)
                                     max = current;
-                            #ifndef RECTANGLE_KERNEL
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                             }
                             #endif
                         }
                     }
 
-                    this->set(y, x, max);
+                    set(y, x, max);
                 }
             }
 
@@ -229,7 +225,7 @@ namespace imProc
 
 
         // shallow converter
-        inline cv::Mat toMatCV() const  {  return this->_mat.toMatCV();  }
+        inline cv::Mat toMatCV() const  {  return _mat.toMatCV();  }
 
 
 

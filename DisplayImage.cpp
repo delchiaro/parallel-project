@@ -33,7 +33,7 @@ int main(int argc, char** argv ) {
     int rows = 7;
     int cols = 7;
     imProc::Matrix<bool> SE(cols, rows, true);
-    imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2));
+    imProc::Point<int> center( (int)ceil(rows/2), (int)ceil(cols/2) );
 
 
     TimeProfiler t;
@@ -42,8 +42,8 @@ int main(int argc, char** argv ) {
     t.start();
     eroded1.erosion(SE, center );
     t.stop();
-    cout << "Erosion: " << t << endl;
-
+//    cout << "Erosion: " << t << endl;
+//    eroded1.imshow("eroded");
 
     Image eroded2(image);
     t.start();
@@ -61,7 +61,7 @@ int main(int argc, char** argv ) {
 
     Image bench(image);
     t.start();
-    for( int i = 0; i < 10; i++ )
+    for( int i = 0; i < 100; i++ )
     {
         bench.erosion(SE, center);
     }
@@ -70,14 +70,13 @@ int main(int argc, char** argv ) {
 
 
 
-    /*
-    cout << endl << endl;
-    image.imshow("Original");
-    eroded1.imshow("Erosion1");
-    cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
 
-    cv::waitKey(0);
-    */
+//    cout << endl << endl;
+//    image.imshow("Original");
+//    eroded1.imshow("Erosion1");
+//    cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
+//
+//    cv::waitKey(0);
 
     return 0;
 }

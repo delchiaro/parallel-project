@@ -51,7 +51,7 @@ namespace imProc {
         */
         Matrix(T* rawMatrix, int rows, int cols)  : Matrix(rows, cols) {
             for (int i = 0; i < _rows*_cols; i++)
-                this->_pmat[i] = rawMatrix[i];
+                _pmat[i] = rawMatrix[i];
         }
 
 
@@ -59,23 +59,23 @@ namespace imProc {
         // Copy, Assignment, Move
         Matrix(const Matrix<T>& m) : Matrix(m._rows, m._cols ){
             for (int i = 0; i < _rows*_cols; i++)
-                this->_pmat[i] = m._pmat[i];
+                _pmat[i] = m._pmat[i];
         }
         Matrix& operator= (const Matrix &m) {
-            if(this->_pmat != nullptr)
+            if(_pmat != nullptr)
                 delete[] _pmat;
             _rows = m._rows;
             _cols = m._cols;
             _pmat = new T[_rows * _cols];
             for (int i = 0; i < _rows*_cols; i++)
-                this->_pmat[i] = m._pmat[i];
+                _pmat[i] = m._pmat[i];
             return *this;
         }
-        Matrix(Matrix<T>&& m) : _rows(m._rows), _cols(m._cols), _pmat(m._pmat) {
+        __forceinline inline Matrix(Matrix<T>&& m) : _rows(m._rows), _cols(m._cols), _pmat(m._pmat) {
             m._empty();
 
         }
-        Matrix& operator= (Matrix&& m) {
+        inline Matrix& operator= (Matrix&& m) {
             if(_pmat != nullptr)
                 delete[] _pmat;
             _rows = m._rows;
@@ -95,8 +95,8 @@ namespace imProc {
 
 
 
-        __forceinline inline const int& rows() const { return this->_rows; }
-        __forceinline inline const int& cols() const { return this->_cols; }
+        __forceinline inline const int& rows() const { return _rows; }
+        __forceinline inline const int& cols() const { return _cols; }
 
 
         // ~ ~ GETTERS ~ ~
@@ -114,8 +114,8 @@ namespace imProc {
 
 
 
-        void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
-            this->operator=( makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue) );
+        __forceinline inline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+            operator=( makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue) );
         }
 
         Matrix<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue)
@@ -129,7 +129,7 @@ namespace imProc {
                 // TODO: optimize -> for each row copy all columns from leftPadding to _cols-rightPadding
                 for( int j=0 ; j < _cols ; j++)
                 {
-                    m.set(i+topPadding,j+rightPadding, this->get(i,j) );
+                    m.set(i+topPadding,j+rightPadding, get(i,j) );
                 }
             }
 
@@ -146,7 +146,7 @@ namespace imProc {
                 for(int i = 0; i < rows() ; i++)
                     for(int j = 0; j < cols() ; j++)
                         // TODO: debug.. error at runtime
-                        *(ret.row(i).col(j).data) = this->get(i,j);
+                        *(ret.row(i).col(j).data) = get(i,j);
 
                 return ret;
             }

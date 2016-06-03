@@ -16,10 +16,13 @@ using namespace std;
 
 inline uchar* newImg(int rows, int cols, uchar initval = 0);
 inline uchar* cloneImg(const uchar* img, int rows, int cols);
-uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , int initValue);
+uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , uchar initValue);
 void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols);
 void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols);
 void imshow(string message, uchar* img, int rows, int cols);
+
+void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols, int blockRows, int blockCols);
+
 
 int main(int argc, char** argv){
 
@@ -37,7 +40,6 @@ int main(int argc, char** argv){
     int n = imgCV.cols;
     uchar* img = imgCV.data;
 
-
     int seRows = 7;
     int seCols = 7;
     #define RECTANGLE_KERNEL_OPTIMIZATION
@@ -52,7 +54,14 @@ int main(int argc, char** argv){
     erosion(img, m, n, SE, seRows, seCols);
     t.stop();
     cout << "Erosion: " << t << endl;
-    //imshow("erodedImg", img, m, n);
+
+
+    imshow("erodedImg", img, m, n);
+    t.start();
+    blockErosion(img, m, n, SE, seRows, seCols, 4, 4);
+    t.stop();
+    cout << "Erosion: " << t << endl;
+
 
     t.start();
     erosion(img, m, n, SE, seRows, seCols);
@@ -66,7 +75,7 @@ int main(int argc, char** argv){
 
 
     t.start();
-    for( int i = 0; i < 50; i++ )
+    for( int i = 0; i < 100; i++ )
     {
         erosion(img, m, n, SE, seRows, seCols);
     }
@@ -120,7 +129,7 @@ int main(int argc, char** argv){
 
 
 
-void imshow(string message,  uchar* img, int rows, int cols){
+void imshow(string message, uchar* img, int rows, int cols){
     cv::Mat cvImg(rows, cols, CV_8U, img);
     imshow(message, cvImg);
 }
@@ -142,26 +151,26 @@ inline uchar* cloneImg(const uchar* img, int rows, int cols)
 }
 
 // Si assume un kernel con dimensioni m*n, con m,n dispari
-uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , int initValue)
+uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , uchar initValue)
 {
     const int immergRows = rows + 2*paddingTop;
     const int immergCols = cols + 2*paddingLeft;
 
     uchar* immergedImg = newImg(immergRows, immergCols, initValue);
 
-    for(int i = 0; i < rows; i++)
+    for(long i = 0; i < rows; i++)
     {
-        for(int j = 0; j < cols; j++)
-            immergedImg[INDEX( i + paddingTop , j + paddingLeft, immergCols) ] = img[INDEX(i, j, cols) ];
+        for(long j = 0; j < cols; j++)
+        {
+            // NB: using INDEX( i+paddingTop, j+paddingLeft, immergCols ) will not works because MACRO will be translated as:
+            // (col + row * cols) ----> i+paddingTop + j+paddingLeft  * immergCols --->   i + paddingTop + j + ( paddingLeft  * immergCols )  :(
+            immergedImg[INDEX( (i+paddingTop), (j+paddingLeft), immergCols)] = img[INDEX(i, j, cols)];
+        }
 
     }
 
     return immergedImg;
 }
-
-
-//#define SUPER_OPT // in debug riesco a guadagnare circa 1 o mezzo secondo.. (su 50 iterazioni, circa 24.5 - 25 secondi)
-                    //in release perdo 2 secondi (su 100 iterazioni, circa 18 secondi)
 
 
 
@@ -189,25 +198,15 @@ void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int 
             for(int i = 0; i < seRows; i++)
             {
 
-                #ifdef SUPER_OPT
-                xj_row_index = x + (y+i) * cols;
-                xj_row_index_limit = xj_row_index + seCols;
-                for( ; xj_row_index < xj_row_index_limit; xj_row_index++)
-                #else
                 const int yi = y+i;
                 for(int j = 0; j < seCols; j++)
-                #endif
                 {
 
                 #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     if(SE[INDEX(i,j, seCols)]  == 1)
                     {
                 #endif
-                    #ifdef SUPER_OPT
-                    const uchar current = immergedImg[xj_row_index];
-                    #else
                     const uchar& current = immergedImg[INDEX(yi, x+j, cols)];
-                    #endif
                     if (current < min)
                         min = current;
 
@@ -231,56 +230,301 @@ void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int 
 void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
 {
 
-    int paddingTop = floor(seCols/2);
-    int paddingLeft = floor(seRows/2);
+    int paddingTop = ceil(seCols/2);
+    int paddingLeft = ceil(seRows/2);
 
-    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 0);
+    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
+    int immergedRows = rows + 2*paddingTop;
+    int immergedCols = cols + 2*paddingLeft;
 
 #pragma omp parallel for num_threads(rows/8)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)
         {
-            uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+            uchar max = immergedImg[ INDEX( (y + paddingTop), (x + paddingLeft), immergedCols) ];
 
             for(int i = 0; i < seRows; i++)
             {
 
+                const int yi = y+i;
+                for(int j = 0; j < seCols; j++)
+                {
 
-                #ifdef SUPER_OPT
-                    const int rowIndex = (y+i) * cols;
-                    int xj_row_index = x + rowIndex;
-                    for(int j = 0; j < seCols; xj_row_index++, j++)
-                #else
-                    const int yi = y+i;
-                    for(int j = 0; j < seCols; j++)
-                #endif
+                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                    if(SE[INDEX(i,j, seCols)]  == 1)
                     {
+                #endif
 
-                    #ifndef RECTANGLE_KERNEL_OPTIMIZATION
-                        if(SE[INDEX(i,j, seCols)]  == 1)
-                        {
-                    #endif
-                    #ifdef SUPER_OPT
-                        const uchar current = immergedImg[xj_row_index];
-                    #else
-                        const uchar current = immergedImg[INDEX(yi, x+j, cols)];
-                    #endif
-                        if (current < max)
-                            max = current;
+                    const uchar current = immergedImg[INDEX( (y+i), (x+j), immergedCols)];
+                    if (current < max)
+                        max = current;
 
-                    #ifndef RECTANGLE_KERNEL_OPTIMIZATION
-                        }
-                    #endif
-
+                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     }
+                #endif
 
+                }
 
             }
 
             img[INDEX(y, x, cols)] = max;
         }
     }
+
+    delete[] immergedImg;
+}
+
+
+
+
+
+// la computazione viene eseguita su immergedImg e viene scritto il risultato in img
+void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols, int blockRows, int blockCols)
+{
+    /*  Esempio di una immagine 11x11 divisa in 4 blocchi riga e 4 blocchi colonna
+     *  I blocchi centrali avranno dimensione block_dim_rows e block_dim_cols (3x3)
+     *  I blocchi finali sul basso avranno dimensione fvBlock_dim_...
+     *  I blocchi finali sulla destra avranno dimensione fhBlock_dim_...
+     *  Il blocco finale in basso a destra avrá dimensione ffBlock_dim...
+     *  __________ __________ __________ _______
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  __________ __________ __________ _______
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  __________ __________ __________ _______
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  __________ __________ __________ _______
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *  |__|__|__| |__|__|__| |__|__|__| |__|__|
+     *
+     *
+     */
+    int paddingTop = ceil(seCols/2);
+    int paddingLeft = ceil(seRows/2);
+
+    int block_dim_rows = rows / blockRows;
+    int block_dim_cols = cols / blockCols;
+
+
+    int fvBlock_dim_rows = rows % blockRows; // final vertical block (right blocks)
+    int fvBlock_dim_cols = block_dim_cols;
+    bool noFvBlock = (fvBlock_dim_rows == 0);
+
+    int fhBlock_dim_rows = block_dim_rows; // final horizontal block (bottom blocks)
+    int fhBlock_dim_cols = cols % block_dim_cols;
+    bool noFhBlock = (fhBlock_dim_cols == 0);
+
+    int ffBlock_dim_rows = fvBlock_dim_rows; // final final block (bottom right corner).
+    int ffBlock_dim_cols = fhBlock_dim_cols;
+    bool noFfBlock = (noFvBlock || noFhBlock);
+
+    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 0);
+
+
+
+
+    for(int bi = 0 ; bi < blockRows -1 + noFvBlock ; bi++)
+    {
+        for(int bj = 0 ; bj < blockCols -1 + noFhBlock ; bj++)
+        {
+            // for each BLOCK(bi, bj):
+
+                const int block_dim_row_stop = (bi+1)*block_dim_rows;
+                for(int y = bi*block_dim_rows; y < block_dim_row_stop; y++)
+                {
+                    const int block_dim_col_stop = (bj+1)*block_dim_cols;
+                    for(int x = bj*block_dim_cols; x < block_dim_col_stop; x++)
+                    {
+                        uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+
+                        for(int i = 0; i < seRows; i++)
+                        {
+
+                            const int yi = y+i;
+                            for(int j = 0; j < seCols; j++)
+                            {
+
+                                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                                if(SE[INDEX(i,j, seCols)]  == 1)
+                                {
+                                #endif
+
+                                const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                                if (current < max)
+                                    max = current;
+
+                                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                                }
+                                #endif
+
+                            }
+
+                        }
+
+                        img[INDEX(y, x, cols)] = max;
+                    }
+                }
+
+
+
+        }
+    }
+
+
+
+
+    // BLOCCHI ORIZZONTALI FINALI IN BASSO
+    if(noFhBlock == false)
+    {
+        int bi =  blockRows;
+        for(int bj = 0 ; bj < blockCols -1 + noFvBlock ; bj++)
+        {
+            // for each BLOCK(bi, bj):
+
+            const int fhBlock_dim_row_stop = bi*block_dim_rows + fhBlock_dim_rows;
+            for(int y = bi*fhBlock_dim_rows; y < fhBlock_dim_row_stop; y++)
+            {
+                const int fhBlock_dim_col_stop = bj*fhBlock_dim_cols + fhBlock_dim_cols;
+                for(int x = bj*fhBlock_dim_cols; x < fhBlock_dim_col_stop; x++)
+                {
+                    uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+
+                    for(int i = 0; i < seRows; i++)
+                    {
+
+                        const int yi = y+i;
+                        for(int j = 0; j < seCols; j++)
+                        {
+
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                            if(SE[INDEX(i,j, seCols)]  == 1)
+                            {
+                            #endif
+
+                            const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                            if (current < max)
+                                max = current;
+
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                            }
+                            #endif
+
+                        }
+
+                    }
+
+                    img[INDEX(y, x, cols)] = max;
+                }
+            }
+
+
+
+        }
+    }
+
+
+    // BLOCCHI VERTICALI FINALI SULLA DESTRA
+    if(noFvBlock == false)
+    {
+        int bj =  blockCols;
+        for(int bi = 0 ; bi < blockRows -1 + noFhBlock; bi++)
+        {
+            // for each BLOCK(bi, bj):
+
+            const int fvBlock_dim_row_stop = bi*block_dim_rows + fvBlock_dim_rows;
+            for(int y = bi*fvBlock_dim_rows; y < fvBlock_dim_row_stop; y++)
+            {
+                const int fvBlock_dim_col_stop = bj*block_dim_cols + fvBlock_dim_cols;
+                for(int x = bj*fvBlock_dim_cols; x < fvBlock_dim_col_stop; x++)
+                {
+                    uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+
+                    for(int i = 0; i < seRows; i++)
+                    {
+
+                        const int yi = y+i;
+                        for(int j = 0; j < seCols; j++)
+                        {
+
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                            if(SE[INDEX(i,j, seCols)]  == 1)
+                            {
+                            #endif
+
+                            const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                            if (current < max)
+                                max = current;
+
+                            #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                            }
+                            #endif
+
+                        }
+
+                    }
+
+                    img[INDEX(y, x, cols)] = max;
+                }
+            }
+
+
+
+        }
+    }
+
+
+    // BLOCCO FINALE IN BASSO A DESTRA
+    if(noFfBlock == false)
+    {
+        int bj =  blockCols;
+        int bi = blockRows;
+
+        const int ffBlock_dim_row_stop = bi*block_dim_rows + ffBlock_dim_rows;
+        for(int y = bi*ffBlock_dim_rows; y < ffBlock_dim_row_stop; y++)
+        {
+            const int ffBlock_dim_col_stop = bj*block_dim_cols + ffBlock_dim_cols;
+            for(int x = bj*ffBlock_dim_cols; x < ffBlock_dim_col_stop; x++)
+            {
+                uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+
+                for(int i = 0; i < seRows; i++)
+                {
+
+                    const int yi = y+i;
+                    for(int j = 0; j < seCols; j++)
+                    {
+
+                        #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                        if(SE[INDEX(i,j, seCols)]  == 1)
+                        {
+                        #endif
+
+                        const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                        if (current < max)
+                            max = current;
+
+                        #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+                        }
+                        #endif
+
+                    }
+
+                }
+
+                img[INDEX(y, x, cols)] = max;
+            }
+        }
+
+
+
+    }
+
 
     delete[] immergedImg;
 }
