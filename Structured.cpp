@@ -10,7 +10,7 @@
 using namespace cv;
 using namespace std;
 
-#define INDEX(row, col, cols) (col + row * cols)
+#define INDEX(row, col, cols) ((col) + (row) * (cols))
 
 
 
@@ -56,31 +56,33 @@ int main(int argc, char** argv){
     cout << "Erosion: " << t << endl;
 
 
-    imshow("erodedImg", img, m, n);
+    int blockDim = 4;
+
     t.start();
-    blockErosion(img, m, n, SE, seRows, seCols, 4, 4);
+    blockErosion(img, m, n, SE, seRows, seCols, blockDim, blockDim);
     t.stop();
-    cout << "Erosion: " << t << endl;
+    cout << "BlockErosion: " << t << endl;
+
+
+//    imshow("Eroded Structured", img, m, n);
+//    cv::waitKey(0);
 
 
     t.start();
-    erosion(img, m, n, SE, seRows, seCols);
-    t.stop();
-    cout << "Erosion: " << t << endl;
-
-    t.start();
-    erosion(img, m, n, SE, seRows, seCols);
-    t.stop();
-    cout << "Erosion: " << t << endl;
-
-
-    t.start();
-    for( int i = 0; i < 100; i++ )
+    for( int i = 0; i < 50; i++ )
     {
         erosion(img, m, n, SE, seRows, seCols);
     }
     t.stop();
-    cout << "Bench (erosion x 100): " << t << endl;
+    cout << "Erosion Bench (erosion x 50): " << t << endl;
+
+    t.start();
+    for( int i = 0; i < 50; i++ )
+    {
+        blockErosion(img, m, n, SE, seRows, seCols, blockDim, blockDim);
+    }
+    t.stop();
+    cout << "BlockErosion Bench (erosion x 50): " << t << endl;
 
 
 //
@@ -164,7 +166,7 @@ uchar* immerge(const uchar* img, int rows, int cols, int paddingTop , int paddin
         {
             // NB: using INDEX( i+paddingTop, j+paddingLeft, immergCols ) will not works because MACRO will be translated as:
             // (col + row * cols) ----> i+paddingTop + j+paddingLeft  * immergCols --->   i + paddingTop + j + ( paddingLeft  * immergCols )  :(
-            immergedImg[INDEX( (i+paddingTop), (j+paddingLeft), immergCols)] = img[INDEX(i, j, cols)];
+            immergedImg[INDEX( i+paddingTop, j+paddingLeft, immergCols)] = img[INDEX(i, j, cols)];
         }
 
     }
@@ -242,7 +244,7 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
     {
         for(int x = 0; x < cols; x++)
         {
-            uchar max = immergedImg[ INDEX( (y + paddingTop), (x + paddingLeft), immergedCols) ];
+            uchar max = immergedImg[ INDEX( y + paddingTop, x + paddingLeft, immergedCols) ];
 
             for(int i = 0; i < seRows; i++)
             {
@@ -256,7 +258,7 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
                     {
                 #endif
 
-                    const uchar current = immergedImg[INDEX( (y+i), (x+j), immergedCols)];
+                    const uchar current = immergedImg[INDEX( yi, x+j, immergedCols)];
                     if (current < max)
                         max = current;
 
@@ -312,25 +314,32 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
     int block_dim_cols = cols / blockCols;
 
 
-    int fvBlock_dim_rows = rows % blockRows; // final vertical block (right blocks)
-    int fvBlock_dim_cols = block_dim_cols;
-    bool noFvBlock = (fvBlock_dim_rows == 0);
+    int fhBlock_dim_rows = rows % blockRows; // final horizontal block (bottom blocks)
+    int fhBlock_dim_cols = block_dim_cols;
+    bool noFvBlock = (fhBlock_dim_rows == 0);
 
-    int fhBlock_dim_rows = block_dim_rows; // final horizontal block (bottom blocks)
-    int fhBlock_dim_cols = cols % block_dim_cols;
-    bool noFhBlock = (fhBlock_dim_cols == 0);
+    int fvBlock_dim_rows = block_dim_rows;
+    int fvBlock_dim_cols = cols % block_dim_cols;// final vertical block (right blocks)
+    bool noFhBlock = (fvBlock_dim_cols == 0);
 
-    int ffBlock_dim_rows = fvBlock_dim_rows; // final final block (bottom right corner).
-    int ffBlock_dim_cols = fhBlock_dim_cols;
+    int ffBlock_dim_rows = fhBlock_dim_rows; // final final block (bottom right corner).
+    int ffBlock_dim_cols = fvBlock_dim_cols;
     bool noFfBlock = (noFvBlock || noFhBlock);
 
-    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 0);
+    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
+    //int immergedRows = rows + 2*paddingTop;
+    int immergedCols = cols + 2*paddingLeft;
 
 
+#pragma omp parallel sections
+    {
 
+#pragma omp section
 
+    #pragma omp parallel for  num_threads(blockRows -1 + noFvBlock)
     for(int bi = 0 ; bi < blockRows -1 + noFvBlock ; bi++)
     {
+        #pragma omp parallel for  num_threads(blockCols -1 + noFhBlock)
         for(int bj = 0 ; bj < blockCols -1 + noFhBlock ; bj++)
         {
             // for each BLOCK(bi, bj):
@@ -341,7 +350,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                     const int block_dim_col_stop = (bj+1)*block_dim_cols;
                     for(int x = bj*block_dim_cols; x < block_dim_col_stop; x++)
                     {
-                        uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+                        uchar max = immergedImg[ INDEX( (y+paddingTop), (x+paddingLeft), immergedCols) ];
 
                         for(int i = 0; i < seRows; i++)
                         {
@@ -355,7 +364,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                                 {
                                 #endif
 
-                                const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                                const uchar current = immergedImg[INDEX(yi, (x+j), immergedCols)];
                                 if (current < max)
                                     max = current;
 
@@ -378,11 +387,13 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 
 
 
+#pragma omp section
 
     // BLOCCHI ORIZZONTALI FINALI IN BASSO
     if(noFhBlock == false)
     {
-        int bi =  blockRows;
+        int bi =  blockRows-1;
+        #pragma omp parallel for  num_threads(blockCols -1 + noFhBlock)
         for(int bj = 0 ; bj < blockCols -1 + noFvBlock ; bj++)
         {
             // for each BLOCK(bi, bj):
@@ -393,7 +404,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                 const int fhBlock_dim_col_stop = bj*fhBlock_dim_cols + fhBlock_dim_cols;
                 for(int x = bj*fhBlock_dim_cols; x < fhBlock_dim_col_stop; x++)
                 {
-                    uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+                    uchar max = immergedImg[ INDEX(y+ paddingTop, x + paddingLeft, immergedCols) ];
 
                     for(int i = 0; i < seRows; i++)
                     {
@@ -407,7 +418,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                             {
                             #endif
 
-                            const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                            const uchar current = immergedImg[INDEX(yi, x+j, immergedCols)];
                             if (current < max)
                                 max = current;
 
@@ -428,11 +439,13 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
         }
     }
 
+#pragma omp section
 
     // BLOCCHI VERTICALI FINALI SULLA DESTRA
     if(noFvBlock == false)
     {
-        int bj =  blockCols;
+        int bj =  blockCols-1;
+        #pragma omp parallel for  num_threads(blockRows -1 + noFvBlock)
         for(int bi = 0 ; bi < blockRows -1 + noFhBlock; bi++)
         {
             // for each BLOCK(bi, bj):
@@ -443,7 +456,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                 const int fvBlock_dim_col_stop = bj*block_dim_cols + fvBlock_dim_cols;
                 for(int x = bj*fvBlock_dim_cols; x < fvBlock_dim_col_stop; x++)
                 {
-                    uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+                    uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
 
                     for(int i = 0; i < seRows; i++)
                     {
@@ -457,7 +470,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                             {
                             #endif
 
-                            const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                            const uchar current = immergedImg[INDEX(yi, x+j, immergedCols)];
                             if (current < max)
                                 max = current;
 
@@ -478,12 +491,13 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
         }
     }
 
+#pragma omp section
 
     // BLOCCO FINALE IN BASSO A DESTRA
     if(noFfBlock == false)
     {
-        int bj =  blockCols;
-        int bi = blockRows;
+        int bj =  blockCols-1;
+        int bi = blockRows-1;
 
         const int ffBlock_dim_row_stop = bi*block_dim_rows + ffBlock_dim_rows;
         for(int y = bi*ffBlock_dim_rows; y < ffBlock_dim_row_stop; y++)
@@ -491,7 +505,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
             const int ffBlock_dim_col_stop = bj*block_dim_cols + ffBlock_dim_cols;
             for(int x = bj*ffBlock_dim_cols; x < ffBlock_dim_col_stop; x++)
             {
-                uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+                uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
 
                 for(int i = 0; i < seRows; i++)
                 {
@@ -505,7 +519,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                         {
                         #endif
 
-                        const uchar current = immergedImg[INDEX(yi, x+j, cols)];
+                        const uchar current = immergedImg[INDEX(yi, x+j, immergedCols)];
                         if (current < max)
                             max = current;
 
@@ -525,6 +539,8 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 
     }
 
+
+    }
 
     delete[] immergedImg;
 }
