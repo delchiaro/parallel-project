@@ -2,8 +2,35 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/Structured.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/DisplayImage.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/IConvBench.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/BenchManager.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/IConvBench.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/BenchManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchSTRUCT/BenchSTRUCT.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchSTRUCT/BenchSTRUCT.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/StructuringElement.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/Image.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/Point.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/Point.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/Matrix.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/Matrix.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/StructuringElement.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/imProc/Image.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/mainOOP.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/ClosureBenchOOP.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/DilationBenchOOP.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/DilationBenchOOP.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/BenchOOP.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/ErosionBenchOOP.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/ErosionBenchOOP.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/OpeningBenchOOP.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/BenchOOP.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/OpeningBenchOOP.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/ClosureBenchOOP.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/mainSimpleStructured.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/mainStructured.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
