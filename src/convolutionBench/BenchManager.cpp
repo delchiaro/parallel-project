@@ -17,36 +17,39 @@ namespace convolutionBench {
 
 
     void BenchManager::printParamList() {
-    cout << "Test image erosion parallel performance with openMP.";
-    cout << "\n";
-    cout << "Usage:   command <INPUT_IMAGE> [options] \n\n";
-    cout << "NB: options between two rows are mutually exclusive (use max one of them) \n\n";
-    cout << "         LONG          |    SHORT     -    DESCRIPTION                                      DEFAULT   \n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " iter         <NUM>    |  i  <NUM>    -   Specify the number NUM of test to do              {100}     \n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " no-preliminar         |  np          -   Disable the preliminar triple test run            {enabled} \n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " fixed-thread  <N>     |  ft <NUM>    -   Specify the number of thread to use               {disabled}\n";
-    cout << " div-thread    <N>     |  dt <NUM>    -   Specify the number of threads as imgRows/NUM      {8}       \n";
-    cout << "                       |                  Specify ft or dt multiple time to run multiple tests         \n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " se-wh      <NUM>      |  swh <W> <H> -   Set the width and height of Structuring Element   {7}       \n";
-    cout << " se-dim     <NUM>      |  sd  <NUM>   -   Set same width and height for Structuring Element {7}       \n";
-    cout << "                       |                  Specify se-dim  or se-wh multiple time to run multiple tests\n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " table-out    <PATH>   |  to <PATH>   -   Create new html-table, write results and close    {disabled}\n";
-    cout << " table-new    <PATH>   |  tn <PATH>   -   Create new html-table, write results, leave open  {disabled}\n";
-    cout << " table-append <PATH>   |  ta <PATH>   -   Append new results to an opened table             {disabled}\n";
-    cout << " table-close  <PATH>   |  tc <PATH>   -   Append new results to an opened table and close   {disabled}\n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " terminal              |  t           -   Show output in terminal                           {disabled}\n";
-    cout << " verbose               |  v           -   Show verbose output in terminal                   {disabled}\n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << " show-img              |  s           -   Show output image of the first erosion            {disabled}\n";
-    cout << " ---------------------------------------------------------------------------------------------------  \n";
-    cout << "\n\n";
-}
+        cout << "Test image erosion parallel performance with openMP.";
+        cout << "\n";
+        cout << "Usage:   command <INPUT_IMAGE> [options] \n\n";
+
+        cout << "NB: each option can be specified with: 'option', '-option', '--option', '/option'\n";
+        cout << "NB: options between two rows are mutually exclusive (use max one of them) \n\n";
+
+        cout << "         LONG          |    SHORT     -    DESCRIPTION                                      DEFAULT   \n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " iter         <NUM>    |  i  <NUM>    -   Specify the number NUM of test to do              {100}     \n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " no-preliminar         |  np          -   Disable the preliminar triple test run            {enabled} \n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " threads       <N>     |  t <NUM>     -   Specify the number of thread to use               {disabled}\n";
+//      cout << " div-thread    <N>     |  dt <NUM>    -   Specify the number of threads as imgRows/NUM      {8}       \n";
+        cout << "                       |                  Specify ft or dt multiple time to run multiple tests         \n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " se-wh      <NUM>      |  swh <W> <H> -   Set the width and height of Structuring Element   {7}       \n";
+        cout << " se-dim     <NUM>      |  sd  <NUM>   -   Set same width and height for Structuring Element {7}       \n";
+        cout << "                       |                  Specify se-dim  or se-wh multiple time to run multiple tests\n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " table-out    <PATH>   |  to <PATH>   -   Create new html-table, write results and close    {disabled}\n";
+        cout << " table-new    <PATH>   |  tn <PATH>   -   Create new html-table, write results, leave open  {disabled}\n";
+        cout << " table-append <PATH>   |  ta <PATH>   -   Append new results to an opened table             {disabled}\n";
+        cout << " table-close  <PATH>   |  tc <PATH>   -   Append new results to an opened table and close   {disabled}\n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " terminal              |  t           -   Show output in terminal                           {disabled}\n";
+        cout << " verbose               |  v           -   Show verbose output in terminal                   {disabled}\n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " show-img              |  s           -   Show output image of the first erosion            {disabled}\n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << "\n\n";
+    }
 
 
     void BenchManager::processParam(int argc, char** argv)
@@ -64,6 +67,7 @@ namespace convolutionBench {
             else if (argcheck(argv[i], "no-preliminar", "np"))   preliminar_triple_run = false;
 
             else if (argcheck(argv[i], "fixed-thread", "ft"))   fixedThreadList.push_back(atoi(argv[++i]));
+            else if (argcheck(argv[i], "threads", "t"))   fixedThreadList.push_back(atoi(argv[++i]));
             else if (argcheck(argv[i], "div-thread", "dt"))     divThreadList.push_back(atoi(argv[++i]));
 
 
@@ -129,10 +133,18 @@ namespace convolutionBench {
 
 
     bool BenchManager::argcheck(const char* arg, const char* long_param, const char* short_param) {
-    if(strcmp(arg, short_param ) == 0 || strcmp(arg, long_param ) == 0)
-        return true;
-    else return false;
-}
+        const char* mArg;
+        if(arg[0] == '-' || arg[0] == '/') {
+            if (arg[1] == '-')
+                mArg = arg + 2;
+            else mArg = arg + 1;
+        }
+        else mArg = arg;
+
+        if(strcmp(mArg, short_param ) == 0 || strcmp(mArg, long_param ) == 0)
+            return true;
+        else return false;
+    }
 
 
 
