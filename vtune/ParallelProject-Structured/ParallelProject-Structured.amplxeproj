@@ -105,10 +105,10 @@
        <use_app_dir_as_work_dir type="bool">true</use_app_dir_as_work_dir>
        <launch.userapppath type="string">/home/nagash/workspace/parallel-project/bin/debug/Structured</launch.userapppath>
        <launch_app.app_to_launch type="string">/home/nagash/workspace/parallel-project/bin/debug/Structured</launch_app.app_to_launch>
-       <launch_app.inherit_sys_environment type="bool">true</launch_app.inherit_sys_environment>
        <launch_app.app_parameters type="string">imgBig.jpg v to out.html i 20 ft 2</launch_app.app_parameters>
-       <launch_app.working_folder type="string">/home/nagash/workspace/parallel-project/bin/debug</launch_app.working_folder>
+       <launch_app.inherit_sys_environment type="bool">true</launch_app.inherit_sys_environment>
        <result_directory.path type="string">/home/nagash/workspace/parallel-project/vtune/ParallelProject-Structured/r@@@{at}</result_directory.path>
+       <launch_app.working_folder type="string">/home/nagash/workspace/parallel-project/bin/debug</launch_app.working_folder>
        <search_directories type="bag"/>
        <context>
         <contextValue>
@@ -263,7 +263,7 @@
    </result_pattern>
   </target_settings>
   <analysis_type_settings>
-   <selected_analysis_type_path type="string">/opt/intel/vtune_amplifier_xe_2016.2.0.444464/config/analysis_type/basic_hotspots.cfg</selected_analysis_type_path>
+   <selected_analysis_type_path type="string">/opt/intel/vtune_amplifier_xe_2016.2.0.444464/config/analysis_type/memory_access.cfg</selected_analysis_type_path>
   </analysis_type_settings>
  </All_Configurations-All_Platforms>
  <contextValues>

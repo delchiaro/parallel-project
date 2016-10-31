@@ -78,8 +78,8 @@ public:
 
         this->imgPath = imgPath;
         imgCV = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);
-        imgWidth = imgCV.rows;
-        imgHeight = imgCV.cols;
+        imgWidth = imgCV.cols;
+        imgHeight = imgCV.rows;
         img = imgCV.data;
 
         nThreads = threads;

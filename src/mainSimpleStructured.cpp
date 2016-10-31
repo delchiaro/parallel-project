@@ -31,7 +31,17 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 #define RECTANGLE_KERNEL_OPTIMIZATION
 
 
-//#define BLOCK_EROSION
+
+// DEFINE BLOCK_EROSION TO ENABLE BLOCK_EROSION INSTEAD OF STANDARD EROSION
+// #define BLOCK_EROSION
+int blockDim = 4;
+int nThreads = 32;
+
+int seRows = 7;
+int seCols = 7;
+
+int nErosions = 30;
+
 
 
 int main(int argc, char** argv){
@@ -48,57 +58,55 @@ int main(int argc, char** argv){
     Mat imgCV = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
     int m = imgCV.rows;
     int n = imgCV.cols;
-    uchar* img = imgCV.data;
+    uchar* originalImage = imgCV.data;
+    uchar* processedImage = cloneImg(originalImage,m,n);
 
-    int seRows = 7;
-    int seCols = 7;
 
     const uchar* SE =  newImg(seRows, seCols, 1);
 
     TimeProfiler t;
 
+
+    uchar* multipleProcessedImg = cloneImg(originalImage,m,n);
+
+#ifdef BLOCK_EROSION
+
+
     t.start();
-    erosion(img, m, n, SE, seRows, seCols);
+    blockErosion(processedImage, m, n, SE, seRows, blockDim, blockDim, blockDim);
     t.stop();
     cout << "Erosion: " << t << endl;
 
-
-#ifdef BLOCK_EROSION
-    int blockDim = 4;
     t.start();
-    blockErosion(img, m, n, SE, seRows, seCols, blockDim, blockDim);
+    for( int i = 0; i < nErosions; i++ )
+        blockErosion(multipleProcessedImg, m, n, SE, seRows, blockDim, blockDim, blockDim);
     t.stop();
-    cout << "BlockErosion: " << t << endl;
-#endif
+    cout << "Erosion IConvBench (erosion x " << nErosions << "): " << t << endl;
 
-//    imshow("Eroded Structured", img, m, n);
-//    cv::waitKey(0);
+#else
 
 
-    int nErosions = 30;
+    t.start();
+    erosion(processedImage, m, n, SE, seRows, seCols);
+    t.stop();
+    cout << "Erosion: " << t << endl;
+
     t.start();
     for( int i = 0; i < nErosions; i++ )
     {
-        erosion(img, m, n, SE, seRows, seCols);
+        erosion(multipleProcessedImg, m, n, SE, seRows, seCols);
     }
     t.stop();
     cout << "Erosion IConvBench (erosion x " << nErosions << "): " << t << endl;
 
-
-
-//    nErosions = 10;
-//    t.start();
-//    for( int i = 0; i < nErosions; i++ )
-//    {
-//        blockErosion(img, m, n, SE, seRows, seCols, blockDim, blockDim);
-//    }
-//    t.stop();
-//    cout << "BlockErosion IConvBench (erosion x " << nErosions << "): " << t << endl;
+#endif
 
 
 
-//
-//    waitKey
+
+    imshow("Original Image", originalImage, m, n);
+    imshow("Processed Image", processedImage, m, n);
+    cv::waitKey(0);
 
     delete[] SE;
 
@@ -201,7 +209,7 @@ void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int 
         int xj_row_index_limit=0;
     #endif
 
-#pragma omp parallel for num_threads(rows/8)
+#pragma omp parallel for num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)
@@ -251,7 +259,7 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
     int immergedRows = rows + 2*paddingTop;
     int immergedCols = cols + 2*paddingLeft;
 
-#pragma omp parallel for num_threads(rows/8)
+#pragma omp parallel for num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)
@@ -410,10 +418,10 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
         {
             // for each BLOCK(bi, bj):
 
-            const int fhBlock_dim_row_stop = bi*block_dim_rows + fhBlock_dim_rows;
+            const int fhBlock_dim_row_stop = (bi+1)*block_dim_rows + fhBlock_dim_rows;
             for(int y = bi*fhBlock_dim_rows; y < fhBlock_dim_row_stop; y++)
             {
-                const int fhBlock_dim_col_stop = bj*fhBlock_dim_cols + fhBlock_dim_cols;
+                const int fhBlock_dim_col_stop = (bj+1)*fhBlock_dim_cols + fhBlock_dim_cols;
                 for(int x = bj*fhBlock_dim_cols; x < fhBlock_dim_col_stop; x++)
                 {
                     uchar max = immergedImg[ INDEX(y+ paddingTop, x + paddingLeft, immergedCols) ];
@@ -462,10 +470,10 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
         {
             // for each BLOCK(bi, bj):
 
-            const int fvBlock_dim_row_stop = bi*block_dim_rows + fvBlock_dim_rows;
+            const int fvBlock_dim_row_stop = (bi+1)*block_dim_rows + fvBlock_dim_rows;
             for(int y = bi*fvBlock_dim_rows; y < fvBlock_dim_row_stop; y++)
             {
-                const int fvBlock_dim_col_stop = bj*block_dim_cols + fvBlock_dim_cols;
+                const int fvBlock_dim_col_stop = (bj+1)*block_dim_cols + fvBlock_dim_cols;
                 for(int x = bj*fvBlock_dim_cols; x < fvBlock_dim_col_stop; x++)
                 {
                     uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];

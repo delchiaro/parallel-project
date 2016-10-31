@@ -116,7 +116,7 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
     int immergedRows = rows + 2*paddingTop;
     int immergedCols = cols + 2*paddingLeft;
 
-#pragma omp parallel for num_threads(nThreads)
+#pragma omp parallel for schedule(static, 16) num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)

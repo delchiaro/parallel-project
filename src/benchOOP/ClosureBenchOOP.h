@@ -11,7 +11,7 @@
 class ClosureBenchOOP : public BenchOOP<ClosureBenchOOP>  {
 public:
     void run() {
-        BenchOOP::originalImage.dilation( BenchOOP::SE );
+        BenchOOP::processingImage.dilation( BenchOOP::SE );
     }
 
 

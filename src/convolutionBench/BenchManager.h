@@ -21,7 +21,8 @@ class BenchManager {
 
 public:
     BenchManager( int argc, char** argv );
-    template <class T> int start(T bench)
+
+    template <class T> int start(T& bench)
     {
 
         if(table_create)
@@ -114,6 +115,18 @@ public:
         if(table.is_open())
             table.close();
 
+        if(showImg)
+        {
+            //if(preliminar_triple_run == false)
+            //    singleBench();
+            cout << endl << endl;
+            bench.showOriginalImg();
+            bench.showProcessedImg();
+            //image.imshow("Original");
+            //eroded1.imshow("First Erosion");
+            cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
+            cv::waitKey(0);
+        }
 
     }
 
@@ -128,7 +141,7 @@ protected:
 
 
     // TODO: should be IConvBench<T> convolutionBench, not T convolutionBench.. but errors occur at compile time..
-    template <class T> void runBench(T bench, uint threads, uint div_thread, uint se_width, uint se_height)
+    template <class T> void runBench(T& bench, const uint& threads, const uint& div_thread, const uint& se_width, const uint& se_height)
     {
 
         if(verbose) {
@@ -187,18 +200,7 @@ protected:
         }
 
 
-        if(showImg)
-        {
-            //if(preliminar_triple_run == false)
-            //    singleBench();
-            cout << endl << endl;
-            bench.showOriginalImg();
-            bench.showProcessedImg();
-            //image.imshow("Original");
-            //eroded1.imshow("First Erosion");
-            cout << endl << endl << "DONE!" << endl << "Press a key to continue. . .";
-            cv::waitKey(0);
-        }
+
 
     }
 
