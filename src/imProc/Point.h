@@ -24,11 +24,11 @@ namespace imProc
         Point(const T& y, const T& x) :  _y(y), _x(x) {}
 
 
-        __forceinline inline const int &y() const { return _y; }
-        __forceinline inline const int &x() const { return _x; }
+        __forceinline const int &y() const { return _y; }
+        __forceinline const int &x() const { return _x; }
 
-        __forceinline inline void y(const T& new_y) { _y = new_y; }
-        __forceinline inline void x(const T& new_x) { _x = new_x; }
+        __forceinline void y(const T& new_y) { _y = new_y; }
+        __forceinline void x(const T& new_x) { _x = new_x; }
 
     };
 }

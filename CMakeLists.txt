@@ -15,7 +15,7 @@ endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 -std=c++11 -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp")
 set(SOURCE_FILES src/mainSimpleStructured.cpp src/imProc/Matrix.cpp src/imProc/Image.cpp  src/imProc/point.cpp src/utils/TimeProfiler.cpp )
 
 set(DEBUG)

@@ -25,25 +25,39 @@ public:
     template <class T> int start(T& bench)
     {
 
-        if(table_create)
+        if(html_table_create)
         {
-            table.open(out, ios_base::trunc );
-            table << "<table border=\"1px solid black\" style=\"border: 1px solid black; border-collapse: collapse\">\n\n";
+                table_html.open(out_html, ios_base::trunc );
+                table_html << "<table border=\"1px solid black\" style=\"border: 1px solid black; border-collapse: collapse\">\n\n";
 
-            table << "\t<tr>\n";
-            table << "\t\t<th>SE w</th>\n";
-            table << "\t\t<th>SE h</th>\n";
-            table << "\t\t<th>DivThr</th>\n";
-            table << "\t\t<th>FixThr</th>\n";
+                table_html << "\t<tr>\n";
+                table_html << "\t\t<th>SE w</th>\n";
+                table_html << "\t\t<th>SE h</th>\n";
+                table_html << "\t\t<th>Threads</th>\n";
+                if(preliminar_triple_run)
+                {
+                    table_html << "\t\t<th>Run 1</th>\n";
+                    table_html << "\t\t<th>Run 2</th>\n";
+                    table_html << "\t\t<th>Run 3</th>\n";
+                }
+                table_html << "\t\t<th>Loop x" << DEFAULT_BENCH_LOOPS << "</th>\n";
+                table_html << "\t</tr>\n\n";
+        }
+        if(csv_table_create)
+        {
+            table_csv.open(out_csv, ios_base::trunc );
+            table_csv << "\"SE w\", ";
+            table_csv << "\"SE h\", ";
+            table_csv << "\"Threads\", ";
             if(preliminar_triple_run)
             {
-                table << "\t\t<th>Run 1</th>\n";
-                table << "\t\t<th>Run 2</th>\n";
-                table << "\t\t<th>Run 3</th>\n";
+                table_csv << "\"Run 1\", ";
+                table_csv << "\"Run 2\", ";
+                table_csv << "\"Run 3\", ";
             }
-            table << "\t\t<th>Loop x" << DEFAULT_BENCH_LOOPS << "</th>\n";
-            table << "\t</tr>\n\n";
+            table_csv << "\"Loop x" << DEFAULT_BENCH_LOOPS << "\", ";
         }
+
 
 
         if( seDimsList.empty() )
@@ -61,59 +75,50 @@ public:
             uint se_h = get<0>(dims);
             ofstream table;
 
-            while(divThreadList.empty() == false)
-            {
-                uint divThread = divThreadList.front();
-                divThreadList.pop_front();
-
-                if(table_append) {
-                    if(table.is_open() == false)
-                        table.open(out, ios_base::app);
-                    table << "\t<tr>\n";
-                    //table << "\t\t<td colspan=\"" << divThreadList.size() + fixedThreadList.size() << "\">" << se_w << "</td>\n";
-                    //table << "\t\t<td colspan=\"" << divThreadList.size() + fixedThreadList.size()  << "\">" << se_w << "</td>\n";
-                    table << "\t\t<td>" << se_w << "</td>\n";
-                    table << "\t\t<td>" << se_w << "</td>\n";
-                    table << "\t\t<td>" << divThread << "</td>\n";
-                    table << "\t\t<td></td>\n";
-                }
-
-                runBench<T>(bench, 0, divThread, get<0>(dims), get<1>(dims));
-
-                if(table_append)
-                    table << "\t</tr>\n";
-            }
 
             while(fixedThreadList.empty() == false)
             {
                 uint fixedThread = fixedThreadList.front();
                 fixedThreadList.pop_front();
 
-                if(table_append) {
-                    if(table.is_open() == false)
-                        table.open(out, ios_base::app);
-                    table << "\t<tr>\n";
-                    //table << "\t\t<td colspan=\"" << divThreadList.size() + fixedThreadList.size() << "\">" << se_w << "</td>\n";
-                    //table << "\t\t<td colspan=\"" << divThreadList.size() + fixedThreadList.size()  << "\">" << se_w << "</td>\n";
-                    table << "\t\t<td>" << se_w << "</td>\n";
-                    table << "\t\t<td>" << se_w << "</td>\n";
-                    table << "\t\t<td></td>\n";
-                    table << "\t\t<td>" << fixedThread << "</td>\n";
+                if(html_table_append)
+                {
+                    if(table_html.is_open() == false)
+                        table_html.open(out_html, ios_base::app);
+                    table_html << "\t<tr>\n";
+                    //table_html << "\t\t<td colspan=\"" << divThreadList.size() + fixedThreadList.size() << "\">" << se_w << "</td>\n";
+                    //table_html << "\t\t<td colspan=\"" << divThreadList.size() + fixedThreadList.size()  << "\">" << se_w << "</td>\n";
+                    table_html << "\t\t<td>" << se_w << "</td>\n";
+                    table_html << "\t\t<td>" << se_w << "</td>\n";
+                    table_html << "\t\t<td>" << fixedThread << "</td>\n";
+                }
+                if(csv_table_append)
+                {
+                    if(table_csv.is_open() == false)
+                        table_csv.open(out_csv, ios_base::app);
+                    table_csv << "\n";
+                    table_csv << se_w << ", ";
+                    table_csv << se_w << ", ";
+                    table_csv << fixedThread << ", ";
                 }
 
                 runBench<T>(bench, fixedThread, 0, get<0>(dims), get<1>(dims));
 
 
-                if(table_append) table << "\t</tr>\n";
+                if(html_table_append) table << "\t</tr>\n";
             }
 
 
         }
 
-        if(table_close)
-            table << "</table>\n";
-        if(table.is_open())
-            table.close();
+        if(html_table_close)
+            table_html << "</table>\n";
+
+        if(table_html.is_open())
+            table_html.close();
+
+        if(table_csv.is_open())
+            table_csv.close();
 
         if(showImg)
         {
@@ -189,16 +194,22 @@ protected:
 
 
 
-        if(table_append)
+        if(html_table_append)
         {
-            ofstream table(out, ios_base::app );
-            table << "\t\t<td>" << T1 << "</td>\n";
-            table << "\t\t<td>" << T2 << "</td>\n";
-            table << "\t\t<td>" << T3 << "</td>\n";
-            table << "\t\t<td>" << TLOOP << "</td>\n";
-            table.close();
+            //ofstream table(out, ios_base::app );
+            table_html << "\t\t<td>" << T1 << "</td>\n";
+            table_html << "\t\t<td>" << T2 << "</td>\n";
+            table_html << "\t\t<td>" << T3 << "</td>\n";
+            table_html << "\t\t<td>" << TLOOP << "</td>\n";
+            // table_html.close();
         }
-
+        if(csv_table_append)
+        {
+            table_csv << T1 <<", ";
+            table_csv << T2 <<", ";
+            table_csv << T3 <<", ";
+            table_csv << TLOOP <<", ";
+        }
 
 
 
@@ -207,18 +218,22 @@ protected:
 
 private:
 
-    std::ofstream table;
+    std::ofstream table_html;
+    std::ofstream table_csv;
 
     uint DEFAULT_BENCH_LOOPS = 100;
     uint DEFAULT_SE_DIM = 7;
     uint DEFAULT_DIV_THREAD = 8;
 
+    std::string out_html;
+    std::string out_csv;
 
+    bool csv_table_create = false;
+    bool csv_table_append = false;
 
-    std::string out;
-    bool table_create = false;
-    bool table_append = false;
-    bool table_close  = false;
+    bool html_table_create = false;
+    bool html_table_append = false;
+    bool html_table_close  = false;
 
 
 

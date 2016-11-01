@@ -11,7 +11,7 @@ using namespace std;
 
 namespace convolutionBench {
 
-    BenchManager::BenchManager( int argc, char** argv) : table(ofstream()) {
+    BenchManager::BenchManager( int argc, char** argv) : table_html(ofstream()), table_csv(ofstream()) {
         processParam(argc, argv);
     }
 
@@ -24,29 +24,32 @@ namespace convolutionBench {
         cout << "NB: each option can be specified with: 'option', '-option', '--option', '/option'\n";
         cout << "NB: options between two rows are mutually exclusive (use max one of them) \n\n";
 
-        cout << "         LONG          |    SHORT     -    DESCRIPTION                                      DEFAULT   \n";
+        cout << "         LONG               |    SHORT     -    DESCRIPTION                                      DEFAULT   \n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " iter         <NUM>    |  i  <NUM>    -   Specify the number NUM of test to do              {100}     \n";
+        cout << " iter         <NUM>         |  i  <NUM>    -   Specify the number NUM of test to do              {100}     \n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " no-preliminar         |  np          -   Disable the preliminar triple test run            {enabled} \n";
+        cout << " no-preliminar              |  np          -   Disable the preliminar triple test run            {enabled} \n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " threads       <N>     |  t <NUM>     -   Specify the number of thread to use               {disabled}\n";
-//      cout << " div-thread    <N>     |  dt <NUM>    -   Specify the number of threads as imgRows/NUM      {8}       \n";
-        cout << "                       |                  Specify ft or dt multiple time to run multiple tests         \n";
+        cout << " threads       <N>          |  t <NUM>     -   Specify the number of thread to use               {disabled}\n";
+//      cout << " div-thread    <N>          |  dt <NUM>    -   Specify the number of threads as imgRows/NUM      {8}       \n";
+        cout << "                            |                  Specify ft or dt multiple time to run multiple tests         \n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " se-wh      <NUM>      |  swh <W> <H> -   Set the width and height of Structuring Element   {7}       \n";
-        cout << " se-dim     <NUM>      |  sd  <NUM>   -   Set same width and height for Structuring Element {7}       \n";
-        cout << "                       |                  Specify se-dim  or se-wh multiple time to run multiple tests\n";
+        cout << " se-wh      <NUM>           |  swh <W> <H> -   Set the width and height of Structuring Element   {7}       \n";
+        cout << " se-dim     <NUM>           |  sd  <NUM>   -   Set same width and height for Structuring Element {7}       \n";
+        cout << "                            |                  Specify se-dim  or se-wh multiple time to run multiple tests\n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " table-out    <PATH>   |  to <PATH>   -   Create new html-table, write results and close    {disabled}\n";
-        cout << " table-new    <PATH>   |  tn <PATH>   -   Create new html-table, write results, leave open  {disabled}\n";
-        cout << " table-append <PATH>   |  ta <PATH>   -   Append new results to an opened table             {disabled}\n";
-        cout << " table-close  <PATH>   |  tc <PATH>   -   Append new results to an opened table and close   {disabled}\n";
+        cout << " html-table-out    <PATH>   | hto <PATH>   -   Create new html-table, write results and close    {disabled}\n";
+        cout << " html-table-new    <PATH>   | htn <PATH>   -   Create new html-table, write results, leave open  {disabled}\n";
+        cout << " html-table-append <PATH>   | hta <PATH>   -   Append new results to an opened table             {disabled}\n";
+        cout << " html-table-close  <PATH>   | htc <PATH>   -   Append new results to an opened table and close   {disabled}\n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " terminal              |  t           -   Show output in terminal                           {disabled}\n";
-        cout << " verbose               |  v           -   Show verbose output in terminal                   {disabled}\n";
+        cout << " csv-table-new    <PATH>    | ctn <PATH>   -   Create new csv-table, write results               {disabled}\n";
+        cout << " csv-table-append <PATH>    | cta <PATH>   -   Append new results to a csv table                 {disabled}\n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
-        cout << " show-img              |  s           -   Show output image of the first erosion            {disabled}\n";
+        cout << " terminal                   |  t           -   Show output in terminal                           {disabled}\n";
+        cout << " verbose                    |  v           -   Show verbose output in terminal                   {disabled}\n";
+        cout << " ---------------------------------------------------------------------------------------------------  \n";
+        cout << " show-img                   |  s           -   Show output image of the first erosion            {disabled}\n";
         cout << " ---------------------------------------------------------------------------------------------------  \n";
         cout << "\n\n";
     }
@@ -85,23 +88,31 @@ namespace convolutionBench {
 
 
 
-            else if (argcheck(argv[i], "table-out", "to")) {
-                table_create = table_append= table_close = true;
-                out = argv[++i];
+            else if (argcheck(argv[i], "html-table-out", "hto")) {
+                html_table_create = html_table_append= html_table_close = true;
+                out_html = argv[++i];
             }
-            else if (argcheck(argv[i], "table-new", "tn")) {
-                table_create = true;
-                out = argv[++i];
+            else if (argcheck(argv[i], "html-table-new", "htn")) {
+                html_table_create = true;
+                out_html = argv[++i];
             }
-            else if(argcheck(argv[i], "table-append", "ta")) {
-                table_append = true;
-                out = argv[++i];
+            else if(argcheck(argv[i], "html-table-append", "hta")) {
+                html_table_append = true;
+                out_html = argv[++i];
             }
-            else if(argcheck(argv[i], "table-close", "tc") ) {
-                table_append = table_close = true;
-                out = argv[++i];
+            else if(argcheck(argv[i], "html-table-close", "thc") ) {
+                html_table_append = html_table_close = true;
+                out_html = argv[++i];
             }
 
+            else if(argcheck(argv[i], "csv-table-new", "ctn") ) {
+                csv_table_create = csv_table_append = true;
+                out_csv = argv[++i];
+            }
+            else if(argcheck(argv[i], "csv-table-append", "cta") ) {
+                csv_table_append = true;
+                out_csv = argv[++i];
+            }
 
             else if(argcheck(argv[i], "terminal", "t") ) terminal = true;
             else if(argcheck(argv[i], "verbose",  "v") ) terminal = verbose = true;

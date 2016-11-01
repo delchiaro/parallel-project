@@ -41,20 +41,20 @@ namespace imProc
 
 
         // Copy, Assignmnet, Move
-        __forceinline inline GenericImage( const GenericImage& copy ) : _mat(copy._mat){
+        __forceinline GenericImage( const GenericImage& copy ) : _mat(copy._mat){
             rows_thread_divisor = copy.rows_thread_divisor;
             threads = copy.threads;
         }
-        __forceinline inline GenericImage<T>& operator= (const GenericImage &im) {
+        __forceinline GenericImage<T>& operator= (const GenericImage &im) {
             _mat = im._mat;
             rows_thread_divisor = im.rows_thread_divisor;
             threads = im.threads;
         }
-        __forceinline inline GenericImage(GenericImage&& move ) :  _mat(std::move(move._mat)) {
+        __forceinline GenericImage(GenericImage&& move ) :  _mat(std::move(move._mat)) {
             rows_thread_divisor = std::move(move.rows_thread_divisor);
             threads = std::move(move.threads);
         }
-        __forceinline inline GenericImage<T>& operator= (GenericImage&& move) {
+        __forceinline GenericImage<T>& operator= (GenericImage&& move) {
             _mat = std::move(move._mat);
             rows_thread_divisor = std::move(move.rows_thread_divisor);
             threads = std::move(move.threads);
@@ -66,7 +66,7 @@ namespace imProc
 //         * fixed_thread disabled (fixed_thread=0, default).
 //         * This value must be greater than 0.
 //         */
-//        __forceinline inline void setRowsThreadDivisor(const uint  &value) {
+//        __forceinline void setRowsThreadDivisor(const uint  &value) {
 //            if(value < 1)
 //                rows_thread_divisor = 1;
 //            rows_thread_divisor = value;
@@ -77,26 +77,26 @@ namespace imProc
          * divided by the rows_thread_divisor.
          * 0: disable fixed thread;
          */
-        __forceinline inline void setThreads(const uint &value) {
+        __forceinline void setThreads(const uint &value) {
 //            if(value < 0)
 //                fixed_thread = 0;
 //            fixed_thread = value;
             threads = value;
         }
-        __forceinline inline const uint& getThreads() {
+        __forceinline const uint& getThreads() {
             return threads;
         }
-//        __forceinline inline void disableFixedThread() {
+//        __forceinline void disableFixedThread() {
 //            fixed_thread = 0;
 //        }
-//        __forceinline inline bool isFixedThreadEnabled() {
+//        __forceinline bool isFixedThreadEnabled() {
 //            return fixed_thread>0;
 //        }
 
-//        __forceinline inline const uint& getRowsThreadDivisor() {
+//        __forceinline const uint& getRowsThreadDivisor() {
 //            return rows_thread_divisor;
 //        }
-//        __forceinline inline uint getNumberOfThreads() {
+//        __forceinline uint getNumberOfThreads() {
 //            uint nThreads;
 //            if(isFixedThreadEnabled())
 //                nThreads = fixed_thread;
@@ -105,21 +105,21 @@ namespace imProc
 //        }
 
 
-        __forceinline inline const int&   rows()  const { return _mat.rows(); }
-        __forceinline inline const int&   cols()  const { return _mat.cols(); }
+        __forceinline const int&   rows()  const { return _mat.rows(); }
+        __forceinline const int&   cols()  const { return _mat.cols(); }
 
 
         // ~ ~ GETTERS ~ ~
-        __forceinline inline const T&     get (int row, int col)  const { return _mat.get(row, col);   }
-        __forceinline inline const T&     get (int index)         const { return _mat.get(index);      }
-        __forceinline inline       T      getV(int row, int col)  const { return _mat.get(row, col);   }
-        __forceinline inline       T      getV(int index)         const { return _mat.get(index);      }
-        __forceinline inline Matrix<T>    getMatrix()             const { return _mat;                 }
+        __forceinline const T&     get (int row, int col)  const { return _mat.get(row, col);   }
+        __forceinline const T&     get (int index)         const { return _mat.get(index);      }
+        __forceinline       T      getV(int row, int col)  const { return _mat.get(row, col);   }
+        __forceinline       T      getV(int index)         const { return _mat.get(index);      }
+        __forceinline Matrix<T>    getMatrix()             const { return _mat;                 }
 
 
         // ~ ~ SETTERS ~ ~
-        __forceinline inline void         set(int row, int col, const T& value)   { _mat.set(row, col, value); }
-        __forceinline inline void         set(int index, const T& value)          { _mat.set(index, value); }
+        __forceinline void         set(int row, int col, const T& value)   { _mat.set(row, col, value); }
+        __forceinline void         set(int index, const T& value)          { _mat.set(index, value); }
 
 
 
@@ -127,18 +127,18 @@ namespace imProc
 
 
 
-        __forceinline inline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+        __forceinline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             //this->_mat = _mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue);
            _mat.immerge(topPadding, rightPadding, bottomPadding,leftPadding, borderValue);
         }
-        __forceinline inline GenericImage<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+        __forceinline GenericImage<T> makeImmersion(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             return GenericImage(_mat.makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue));;
         }
 
 
 
 
-        __forceinline inline void imshow(std::string msg = "") {
+        __forceinline void imshow(std::string msg = "") {
             cv::Mat m = _mat.toMatCV();
             cv::imshow(msg, m);
         }
@@ -254,7 +254,7 @@ namespace imProc
 
 
 
-        __forceinline inline void opening(const StructuringElement& SE )
+        __forceinline void opening(const StructuringElement& SE )
         {
             erosion(SE);
             dilation(SE);
@@ -264,7 +264,7 @@ namespace imProc
             // with erosion/dilation optimized (immersion), on imgBig.jpg - NagashLaptop - core i5 @ 2.38ghz ---> 6/7 seconds
         }
 
-        __forceinline inline void closure(const StructuringElement& SE )
+        __forceinline void closure(const StructuringElement& SE )
         {
             dilation(SE);
             erosion(SE);
@@ -277,7 +277,7 @@ namespace imProc
 
 
         // shallow converter
-        __forceinline inline cv::Mat toMatCV() const  {  return _mat.toMatCV();  }
+        __forceinline cv::Mat toMatCV() const  {  return _mat.toMatCV();  }
 
 
 

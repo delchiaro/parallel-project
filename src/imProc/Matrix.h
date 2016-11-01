@@ -29,8 +29,7 @@ namespace imProc {
         }
 
     protected:
-        __forceinline
-        inline int _index(int row, int col) const {
+        __forceinline int _index(int row, int col) const {
             return col + row * _cols;
         }
 
@@ -71,7 +70,7 @@ namespace imProc {
                 _pmat[i] = m._pmat[i];
             return *this;
         }
-        __forceinline inline Matrix(Matrix<T>&& m) : _rows(m._rows), _cols(m._cols), _pmat(m._pmat) {
+        __forceinline Matrix(Matrix<T>&& m) : _rows(m._rows), _cols(m._cols), _pmat(m._pmat) {
             m._empty();
 
         }
@@ -95,26 +94,26 @@ namespace imProc {
 
 
 
-        __forceinline inline const int& rows() const { return _rows; }
-        __forceinline inline const int& cols() const { return _cols; }
+        __forceinline const int& rows() const { return _rows; }
+        __forceinline const int& cols() const { return _cols; }
 
 
         // ~ ~ GETTERS ~ ~
-        __forceinline inline const T& get (int row, int col)  const { return _pmat[_index(row, col)]; }
-        __forceinline inline       T  getV(int row, int col)  const { return _pmat[_index(row, col)]; }
-        __forceinline inline const T& get (int index)         const { return _pmat[index]; }
-        __forceinline inline       T  getV(int index)         const { return _pmat[index]; }
-        __forceinline inline       T* getRaw() const  { return _pmat; } // pointer to const data (immutable - read only)
+        __forceinline const T& get (int row, int col)  const { return _pmat[_index(row, col)]; }
+        __forceinline       T  getV(int row, int col)  const { return _pmat[_index(row, col)]; }
+        __forceinline const T& get (int index)         const { return _pmat[index]; }
+        __forceinline       T  getV(int index)         const { return _pmat[index]; }
+        __forceinline       T* getRaw() const  { return _pmat; } // pointer to const data (immutable - read only)
 
 
 
         // ~ ~ SETTERS ~ ~
-        __forceinline inline void set(int row, int col, const T& value)   { _pmat[_index(row, col)] = value; }
-        __forceinline inline void set(int index, const T& value)          { _pmat[index] = value; }
+        __forceinline void set(int row, int col, const T& value)   { _pmat[_index(row, col)] = value; }
+        __forceinline void set(int index, const T& value)          { _pmat[index] = value; }
 
 
 
-        __forceinline inline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
+        __forceinline void immerge(int topPadding, int rightPadding, int bottomPadding, int leftPadding, T borderValue) {
             operator=( makeImmersion(topPadding, rightPadding, bottomPadding, leftPadding, borderValue) );
         }
 
