@@ -11,7 +11,7 @@ using namespace std;
 
 namespace convolutionBench {
 
-    BenchManager::BenchManager( int argc, char** argv) : table_html(ofstream()), table_csv(ofstream()) {
+    BenchManager::BenchManager( int argc, char** argv)  {
         processParam(argc, argv);
     }
 
