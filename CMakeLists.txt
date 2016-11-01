@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3)
 
-set(OPT_FLAG "-O0")
+set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O2")
 
