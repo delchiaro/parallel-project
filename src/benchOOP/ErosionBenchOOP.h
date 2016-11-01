@@ -12,7 +12,7 @@ class ErosionBenchOOP : public BenchOOP<ErosionBenchOOP> {
 public:
 
     void run() {
-        BenchOOP::processingImage.erosion( BenchOOP::SE);
+        BenchOOP::benchImage.erosion( BenchOOP::SE);
     }
 
 };

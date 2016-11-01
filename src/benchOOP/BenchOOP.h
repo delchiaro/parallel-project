@@ -29,7 +29,7 @@ private:
 protected:
     StructuringElement SE = StructuringElement(1,1);
     Image originalImage = Image(1,1,0);
-    Image processingImage = Image(1,1,0);
+    Image benchImage = Image(1,1,0);
 
 
 public:
@@ -44,7 +44,7 @@ public:
             originalImage.setThreads(threads / originalImage.rows());
         else originalImage.setThreads(threads);
         this->nThreads = originalImage.getThreads();
-        processingImage = Image(originalImage);
+        benchImage = Image(originalImage);
         this->imgPath = imgPath;
 
         imgLoaded = true;
@@ -56,15 +56,19 @@ public:
     virtual void showProcessedImg() override {
         if(imgLoaded)
         {
-            if(imgProcessed == false)
+            // enabling this check, we will show the image after ALL the processing.
+            // disabling this check, we always make a new processing af a copy of the original image before showing
+            // if(imgProcessed == false)
+            {
+                benchImage = Image(originalImage);
                 static_cast<T*>(this)->run();
-                //run();
-            processingImage.imshow("Processed Image");
+            }
+            benchImage.imshow("Processed Image");
         }
     }
 
     virtual  void onPreRun() override {
-        processingImage = Image(originalImage);
+        benchImage = Image(originalImage);
     }
     virtual void onPostRun() override {
         imgProcessed = true;

@@ -11,7 +11,7 @@
 class DilationBenchOOP : public BenchOOP<DilationBenchOOP> {
 public:
     void run() {
-        BenchOOP::processingImage.dilation( BenchOOP::SE);
+        BenchOOP::benchImage.dilation( BenchOOP::SE);
     }
 
 };
