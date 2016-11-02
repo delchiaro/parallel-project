@@ -95,6 +95,7 @@ public:
             bench.init(imgPath, fixedThreadList.front(), get<0>(seDimsList.front()), get<1>(seDimsList.front()), true);
             bench.start(preliminar_global);
         }
+        int nSE = seDimsList.size();
         for (int sed = 0; sed < seDimsList.size(); sed++)
         {
             tuple<uint, uint> dims = seDimsList.front();
@@ -103,11 +104,13 @@ public:
             uint se_h = get<1>(dims);
             ofstream table;
 
-
-            while(fixedThreadList.empty() == false)
+            std::list<uint> fixedThreadList_sed = fixedThreadList;
+            // for each sed (se-dimension) we have to iterate all the fixedTHreadList
+            // so we make a copy and we pop the elements from the copy.
+            while(fixedThreadList_sed.empty() == false)
             {
-                uint fixedThread = fixedThreadList.front();
-                fixedThreadList.pop_front();
+                uint fixedThread = fixedThreadList_sed.front();
+                fixedThreadList_sed.pop_front();
 
                 if(html_table_append)
                 {
