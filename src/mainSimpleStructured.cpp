@@ -347,7 +347,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
     bool noFfBlock = (noFvBlock || noFhBlock);
 
     uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
-    //int immergedRows = rows + 2*paddingTop;
+    //int immergedWidth = rows + 2*paddingTop;
     int immergedCols = cols + 2*paddingLeft;
 
 

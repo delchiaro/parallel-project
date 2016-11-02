@@ -13,7 +13,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 else(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("release mode")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/release${OPT_FLAG}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/release")
+    set(OPT_FLAG " ")
 
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 

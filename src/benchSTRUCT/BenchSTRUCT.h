@@ -44,9 +44,15 @@ private:
     uint seHeight;
 
 
+    int paddingTop; // todo: not floor??
+    int paddingLeft;
+
+    uchar* immergedImg = nullptr;
+    int immergedWidth;
+    int immergedHeight;
+
 
     std::string imgPath;
-    Mat imgCV;
     uchar* img = nullptr;
     uint imgWidth;
     uint imgHeight;
@@ -65,10 +71,9 @@ public:
     BenchSTRUCT() {}
 
     ~BenchSTRUCT() {
-//        if(img != nullptr) // imgCV contains this img pointer, and will manage the memory for us! No delete img or we will get a runtime error.
-//            delete img;
-        if(imgProcessing != nullptr)
-            delete imgProcessing;
+        if(img != nullptr) delete[] img;
+        if(imgProcessing != nullptr) delete[] imgProcessing;
+        if(immergedImg != nullptr) delete[] immergedImg;
     }
 
     virtual void init(std::string imgPath, uint threads, uint se_width, uint se_height, bool useThreadsAsDivisor) override {
@@ -77,10 +82,16 @@ public:
         SE =  newImg(seHeight, seWidth, 1);
 
         this->imgPath = imgPath;
-        imgCV = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);
+        cv::Mat imgCV = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);
         imgWidth = imgCV.cols;
         imgHeight = imgCV.rows;
-        img = imgCV.data;
+        if(img != nullptr) delete[] img;
+        img = cloneImg(imgCV.data, imgHeight, imgWidth);// we need to clone because imgCV distructor will delete imgCV.data !
+
+        paddingTop = ceil(seHeight/2); // todo: not floor??
+        paddingLeft = ceil(seWidth/2);
+
+
 
         nThreads = threads;
         this->useThreadsAsDivisor = useThreadsAsDivisor;
@@ -101,12 +112,6 @@ public:
             imshow("Processed Image", imgProcessing, imgHeight, imgWidth);
         }
     }
-
-    virtual  void onPreRun() override {
-        if(imgProcessing != nullptr) delete imgProcessing;
-        imgProcessing = cloneImg(img, imgHeight, imgWidth);
-    }
-    virtual void onPostRun() override {}
 
 
     virtual const uint getSeWidth() const override {
@@ -134,10 +139,25 @@ public:
     }
 
 
+
+    virtual  void onPreRun() override {
+        if(imgProcessing != nullptr) delete[] imgProcessing;
+        imgProcessing = cloneImg(img, imgHeight, imgWidth);
+        if(immergedImg != nullptr) delete[] immergedImg;
+        immergedImg = immerge(imgProcessing, imgHeight, imgWidth, paddingTop, paddingLeft, 255);
+        immergedHeight = imgHeight+paddingTop*2;
+        immergedWidth = imgWidth +paddingLeft*2;
+    }
+
+
     // Curiously recurring template pattern: Static polymorphism
     void run() {
         erosion(imgProcessing, imgHeight, imgWidth, SE, seHeight, seWidth);
     }
+
+
+
+    virtual void onPostRun() override {}
 
 };
 
