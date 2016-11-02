@@ -95,7 +95,9 @@ public:
         if(img != nullptr)
         {
             if(imgProcessing != nullptr)
-                run();
+                delete[] imgProcessing;
+            imgProcessing = cloneImg(img, imgHeight, imgWidth);
+            run();
             imshow("Processed Image", imgProcessing, imgHeight, imgWidth);
         }
     }

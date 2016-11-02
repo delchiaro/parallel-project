@@ -109,7 +109,7 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
 void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
 {
 
-    int paddingTop = ceil(seCols/2);
+    int paddingTop = ceil(seCols/2); // todo: not floor??
     int paddingLeft = ceil(seRows/2);
 
     uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);

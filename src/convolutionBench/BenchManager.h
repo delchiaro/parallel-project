@@ -95,22 +95,27 @@ public:
             bench.init(imgPath, fixedThreadList.front(), get<0>(seDimsList.front()), get<1>(seDimsList.front()), true);
             bench.start(preliminar_global);
         }
-        int nSE = seDimsList.size();
-        for (int sed = 0; sed < seDimsList.size(); sed++)
+
+        while(seDimsList.empty() == false)
         {
+
             tuple<uint, uint> dims = seDimsList.front();
             seDimsList.pop_front();
             uint se_w = get<0>(dims);
             uint se_h = get<1>(dims);
+            //if(terminal)
+                cout << "SE Width=" << se_w << " \tSE Height=" << se_h << "\n";
+
             ofstream table;
 
-            std::list<uint> fixedThreadList_sed = fixedThreadList;
+            std::list<uint> currentFixedThreadList = fixedThreadList;
             // for each sed (se-dimension) we have to iterate all the fixedTHreadList
             // so we make a copy and we pop the elements from the copy.
-            while(fixedThreadList_sed.empty() == false)
+
+            while(currentFixedThreadList.empty() == false)
             {
-                uint fixedThread = fixedThreadList_sed.front();
-                fixedThreadList_sed.pop_front();
+                uint fixedThread = currentFixedThreadList.front();
+                currentFixedThreadList.pop_front();
 
                 if(html_table_append)
                 {
@@ -138,7 +143,6 @@ public:
 
                 if(html_table_append) table << "\t</tr>\n";
             }
-
 
         }
 
@@ -191,10 +195,11 @@ protected:
 //        else
         bench.init(imgPath, threads, se_width, se_height, false);
 
+        //if(terminal)
+            cout << "N Threads = " << bench.getThreads() << "\n";
 
 
         TimeProfiler t;
-        cout << "N Threads = " << bench.getThreads() << "\n";
 
         double T1 = 0, T2 = 0, T3 = 0;
         for( int i=0 ; i < preliminar_run ; i++)
