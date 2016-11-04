@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.3)
 # set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O2")
 
+# add_definitions( -DVERBOSE_INLINE_STATUS ) # it will define VERBOSE_INLINE_STATUS to show output about the inline status.
 
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -13,8 +14,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 else(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("release mode")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/release")
-    set(OPT_FLAG " ")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/release${OPT_FLAG}")
 
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
@@ -53,9 +53,6 @@ target_link_libraries( Structured ${OpenCV_LIBS}    )
 
 
 
-
-
-add_definitions( -DVERBOSE_INLINE_STATUS ) # it will define VERBOSE_INLINE_STATUS to show output about the inline status.
 
 project(ObjectOriented-forceInline)
 find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )

@@ -55,11 +55,20 @@ public:
 //                    table_html << "\t\t<th>Run 3</th>\n";
 //                }
 
-            table_html << "\t\t<th>Loops</th>\n"; // new
+            table_html << "\t\t<th>Loops</th>\n";
 
-            table_html << "\t\t<th>Benchs</th>\n"; // new
-            table_html << "\t\t<th>Avarage [" << timeUnit << "]</th>\n"; // the old one
-            table_html << "\t\t<th>Variance</th>\n";// new
+            table_html << "\t\t<th>Benchs</th>\n";
+            table_html << "\t\t<th>Avarage [" << timeUnit << "]</th>\n";
+            if(useVariance)
+                table_html << "\t\t<th>Variance</th>\n";
+            else table_html << "\t\t<th>StdDev</th>\n";
+            if(printAllBenchs)
+            {
+                table_html << "\t\t<th></th>\n";
+                for(int i=0 ; i<benchNumber ; i++)
+                    table_html << "\t\t<th>#" << i+1 << "</th>\n";
+
+            }
             table_html << "\t</tr>\n\n";
         }
         if(csv_table_create)
@@ -74,10 +83,19 @@ public:
 //                table_csv << "\"Run 2\", ";
 //                table_csv << "\"Run 3\", ";
 //            }
-            table_csv << "\"Loops\", ";// new
-            table_csv << "\"Benchs\", ";// new
-            table_csv << "\"Avarage [" << timeUnit << "]\", "; // the old one
-            table_csv << "\"Variance\", ";// new
+            table_csv << "\"Loops\", ";
+            table_csv << "\"Benchs\", ";
+            table_csv << "\"Avarage [" << timeUnit << "]\", ";
+            if(useVariance)
+                table_csv << "\"Variance\", ";
+            else table_csv << "\"StdDev\", ";
+
+            if(printAllBenchs)
+            {
+                table_csv << ", ";
+                for(int i=0 ; i<benchNumber ; i++)
+                    table_csv << "#" << i+1 << ", ";
+            }
         }
 
 
@@ -207,7 +225,6 @@ protected:
             t = bench.start();
             if(verbose) cout << "Preliminar Bench: " << t << endl;
             else if(terminal) cout << t << endl;
-            T1 = t.getDSeconds();
         }
 
 
@@ -215,24 +232,27 @@ protected:
         // http://math.stackexchange.com/questions/106700/incremental-averageing
         // avg[n] = avg[n-1] + ( (value[n]-avg[n-1]) / n )
         double avg = 0;
-        double ms[benchNumber];
+        double times[benchNumber];
         for(int i = 0; i < benchNumber ; i++)
         {
             if (benchLoops > 1)
                 t = bench.start(benchLoops);
             else t = bench.start();
-            ms[i] = t.getDSeconds()*secondsMult;
-            avg = avg + (ms[i] - avg) / (i+1);
+            times[i] = t.getDSeconds()*secondsMult;
+            avg = avg + (times[i] - avg) / (i+1);
         }
 
         // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm
         // variance =  SUM i=1->n { (value[i] - avg )^2 } / (n-1)
-        double variance = 0;
+        double stdDev = 0;
         if(benchNumber > 2)
         {
             for (int i = 0; i < benchNumber; i++)
-                variance += (ms[i] - avg) * (ms[i] - avg);
-            variance /= benchNumber-1;
+                stdDev += (times[i] - avg) * (times[i] - avg);
+            stdDev /= benchNumber-1;
+            if(useVariance == false)
+                stdDev = sqrt(stdDev);
+
         }
         if(verbose) cout << "Bench x" << benchLoops << ": " << t << endl << endl;
         else if(terminal) cout << t << endl << endl;
@@ -253,8 +273,12 @@ protected:
             table_html << "\t\t<td>" << benchLoops << "</td>\n";
             table_html << "\t\t<td>" << benchNumber << "</td>\n";
             table_html << "\t\t<td>" << avg << "</td>\n";
-            table_html << "\t\t<td>" << variance << "</td>\n";
-
+            table_html << "\t\t<td>" << useVariance << "</td>\n";
+            if(printAllBenchs) {
+                table_html << "\t\t<td></td>\n";
+                for(int i=0 ; i<benchNumber ; i++)
+                    table_html << "\t\t<td>"  << times[i] << "</td>\n";
+            }
             // table_html.close();
         }
         if(csv_table_append)
@@ -268,7 +292,12 @@ protected:
             table_csv << benchLoops <<", ";
             table_csv << benchNumber <<", ";
             table_csv << avg <<", ";
-            table_csv << variance <<", ";
+            table_csv << stdDev <<", ";
+            if(printAllBenchs) {
+                table_csv << ", ";
+                for(int i=0 ; i<benchNumber ; i++)
+                    table_csv << times[i] << ", ";
+            }
         }
 
 
@@ -298,13 +327,14 @@ private:
     bool html_table_close  = false;
 
 
-
+    bool printAllBenchs = false;
+    bool useVariance = false;
     bool terminal = false;
     bool verbose = false;
     bool showImg = false;
 
-    int  preliminar_global = 50;
-    int  preliminar_run = 5;
+    int  preliminar_global = 0;
+    int  preliminar_run = 0;
     bool preliminar_out = false;
 
     uint benchLoops = DEFAULT_BENCH_LOOPS;
@@ -322,6 +352,7 @@ private:
     void printParamList();
     void processParam(int argc, char** argv);
     bool argcheck(const char* arg, const char* long_param, const char* short_param);
+    bool argcheck(const char* arg, const char* long_param, const char* short_param, const char* short_param2);
 
 };
 

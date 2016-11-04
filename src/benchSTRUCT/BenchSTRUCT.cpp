@@ -12,7 +12,6 @@ void BenchSTRUCT::imshow(string message, uchar* img, int rows, int cols){
     cv::Mat cvImg(rows, cols, CV_8U, img);
     cv::imshow(message, cvImg);
 }
-
 uchar* BenchSTRUCT::newImg(int rows, int cols, uchar initval)
 {
     uchar* img = new uchar[rows * cols];
@@ -98,7 +97,7 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
 // la computazione viene eseguita su immergedImg e viene scritto il risultato in img
 void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
 {
-
+// TODO: remember to try different schedulers !!!
 #pragma omp parallel for num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
