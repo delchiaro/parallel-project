@@ -21,6 +21,7 @@ namespace convolutionBench
 
 
 class BenchManager {
+    std::string timeUnit;
 
 public:
     BenchManager( int argc, char** argv );
@@ -28,7 +29,6 @@ public:
     template <class T> int start(T& bench)
     {
 
-        std::string timeUnit;
         if( secondsMult ==  1)
             timeUnit = "S";
         else if( secondsMult == 1000)
@@ -103,8 +103,8 @@ public:
         if( seDimsList.empty() )
             seDimsList.push_back( tuple<uint, uint>(DEFAULT_SE_DIM, DEFAULT_SE_DIM)  );
 
-        if( divThreadList.empty() && fixedThreadList.empty() )
-            divThreadList.push_back( DEFAULT_DIV_THREAD );
+        if( fixedThreadList.empty() )
+            fixedThreadList.push_back( DEFAULT_DIV_THREAD );
 
 
 
@@ -121,8 +121,6 @@ public:
             seDimsList.pop_front();
             uint se_w = get<0>(dims);
             uint se_h = get<1>(dims);
-            //if(terminal)
-                cout << "SE Width=" << se_w << " \tSE Height=" << se_h << "\n";
 
             ofstream table;
 
@@ -145,6 +143,7 @@ public:
                     table_html << "\t\t<td>" << se_w << "</td>\n";
                     table_html << "\t\t<td>" << se_w << "</td>\n";
                     table_html << "\t\t<td>" << fixedThread << "</td>\n";
+                    table_html.close();
                 }
                 if(csv_table_append)
                 {
@@ -154,18 +153,27 @@ public:
                     table_csv << se_w << ", ";
                     table_csv << se_w << ", ";
                     table_csv << fixedThread << ", ";
+                    table_csv.close();
                 }
 
                 runBench<T>(bench, fixedThread, 0, get<0>(dims), get<1>(dims));
 
 
-                if(html_table_append) table << "\t</tr>\n";
+                if(html_table_append) {
+                    if(table_html.is_open() == false)
+                        table_html.open(out_html, ios_base::app);
+                    table_html << "\t</tr>\n";
+                    table_html.close();
+                }
             }
 
         }
 
-        if(html_table_close)
+        if(html_table_close) {
+            if(table_html.is_open() == false)
+                table_html.open(out_html, ios_base::app);
             table_html << "</table>\n";
+        }
 
         if(table_html.is_open())
             table_html.close();
@@ -200,12 +208,6 @@ protected:
     template <class T> void runBench(T& bench, const uint& threads, const uint& div_thread, const uint& se_width, const uint& se_height)
     {
 
-        if(verbose) {
-            cout << "Version: Object Oriented " << endl;
-            cout << "OpenMP version: " << _OPENMP << endl;
-        }
-
-
         int rows = bench.getImgHeight();
         bool useThreadsAsDivisor = false;
 //        if(div_thread > 0)
@@ -213,9 +215,10 @@ protected:
 //        else
         bench.init(imgPath, threads, se_width, se_height, false);
 
-        //if(terminal)
-            cout << "N Threads = " << bench.getThreads() << "\n";
-
+        if(terminal) cout << "SE W: " << bench.getSeHeight() << " \t" << "SE H:" << bench.getSeWidth() << "\n";
+        if(terminal) cout << "N Threads = " << bench.getThreads() << "\n";
+        // TODO: IConvBench should have a method "getBenchName" or "getBenchDescription", that return a string.
+        // We should print that streng here (if(therminal))
 
         TimeProfiler t;
 
@@ -224,7 +227,6 @@ protected:
         {
             t = bench.start();
             if(verbose) cout << "Preliminar Bench: " << t << endl;
-            else if(terminal) cout << t << endl;
         }
 
 
@@ -254,22 +256,23 @@ protected:
                 stdDev = sqrt(stdDev);
 
         }
-        if(verbose) cout << "Bench x" << benchLoops << ": " << t << endl << endl;
-        else if(terminal) cout << t << endl << endl;
-
+        if(verbose) {
+            cout << "---------------------------------------" << endl;
+            cout << "Bench x" << benchNumber << " (" << benchLoops << " loop per bench)" << endl;
+            cout << "---------------------------------------" << endl;
+            cout << "    AVG = " << avg << " [" << timeUnit << "] \n";
+            if(useVariance)
+                 cout << "    VAR = " << stdDev << endl;
+            else cout << " StdDEV = " << stdDev << endl;
+            cout << "---------------------------------------" << endl << endl << endl ;
+        }
 
 
 
         if(html_table_append)
         {
-            //ofstream table(out, ios_base::app );
-//            if( preliminar_run > 0 && preliminar_out)
-//            {
-//                table_html << "\t\t<td>" << T1 << "</td>\n";
-//                table_html << "\t\t<td>" << T2 << "</td>\n";
-//                table_html << "\t\t<td>" << T3 << "</td>\n";
-//            }
-
+            if(table_html.is_open() == false)
+                table_html.open(out_html, ios_base::app);
             table_html << "\t\t<td>" << benchLoops << "</td>\n";
             table_html << "\t\t<td>" << benchNumber << "</td>\n";
             table_html << "\t\t<td>" << avg << "</td>\n";
@@ -279,16 +282,12 @@ protected:
                 for(int i=0 ; i<benchNumber ; i++)
                     table_html << "\t\t<td>"  << times[i] << "</td>\n";
             }
-            // table_html.close();
+            table_html.close();
         }
         if(csv_table_append)
         {
-//            if( preliminar_run > 0 && preliminar_out)
-//            {
-//                table_csv << T1 << ", ";
-//                table_csv << T2 << ", ";
-//                table_csv << T3 << ", ";
-//            }
+            if(table_csv.is_open() == false)
+                table_csv.open(out_html, ios_base::app);
             table_csv << benchLoops <<", ";
             table_csv << benchNumber <<", ";
             table_csv << avg <<", ";

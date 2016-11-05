@@ -55,9 +55,9 @@ namespace convolutionBench {
         cout << " print-all            | pa           -   Print all the single bench timing in the table             {disabled} \n";
         cout << " seconds-mult   <NUM> | sec-mul ; sm -   Multiply seconds for a Number (use 1000 for ms)               {1}     \n";
         cout << " --------------------------------------------------------------------------------------------------------------\n";
-        cout << " output               |  o           -   Show output in terminal                                    {disabled} \n";
+        cout << " silent               |  sil         -   Hide output in terminal                                    {disabled} \n";
         cout << " verbose              |  v           -   Show verbose output in terminal                            {disabled} \n";
-        cout << " show-img             |  s           -   Show the processed image (after a single execution)        {disabled} \n";
+        cout << " show-img             |  si     ; s  -   Show the processed image (after a single execution)        {disabled} \n";
         cout << " --------------------------------------------------------------------------------------------------------------\n";
         cout << "\n\n";
 
@@ -125,9 +125,9 @@ namespace convolutionBench {
             else if( argcheck(argv[i], "seconds-mult", "sec-mul", "sm"))  secondsMult = atoi(argv[++i]);
             else if( argcheck(argv[i], "variance",     "var" ) ) useVariance = true;
             else if( argcheck(argv[i], "print-all",    "pa"  ) ) printAllBenchs = true;
-            else if( argcheck(argv[i], "output",       "o"   ) ) terminal = true;
+            else if( argcheck(argv[i], "show-img",     "si",  "s"   ) ) showImg = true;
+            else if( argcheck(argv[i], "silent",       "sil" ) ) verbose = terminal = false;
             else if( argcheck(argv[i], "verbose",      "v"   ) ) terminal = verbose = true;
-            else if( argcheck(argv[i], "show-img",     "s"   ) ) showImg = true;
 
 
             else if(   argcheck(argv[i], "help", "h", "?" ) ) {

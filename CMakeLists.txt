@@ -1,11 +1,21 @@
 cmake_minimum_required(VERSION 3.3)
 
- set(OPT_FLAG "-O0")
-# set(OPT_FLAG "-O1")
+
+
+# set(OPT_FLAG "-O0")
 # set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O2")
+set(OPT_FLAG "-O2")
 
 # add_definitions( -DVERBOSE_INLINE_STATUS ) # it will define VERBOSE_INLINE_STATUS to show output about the inline status.
+
+#
+# From: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=640214
+#[1] set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+#[2] set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
+#[3] set(CMAKE_CXX_FLAGS_INIT "")
+# Default: set( CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set( CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -19,7 +29,7 @@ else(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 
-
+MESSAGE( "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_FLAG} -std=c++11 -fopenmp")
 set(SOURCE_FILES src/mainSimpleStructured.cpp src/imProc/Matrix.cpp src/imProc/Image.cpp  src/imProc/point.cpp src/utils/TimeProfiler.cpp )
