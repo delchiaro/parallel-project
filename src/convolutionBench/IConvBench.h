@@ -39,12 +39,13 @@ namespace convolutionBench
         virtual void showProcessedImg() = 0;
 
 
-        virtual const uint getSeWidth()        const = 0;
-        virtual const uint getSeHeight()       const = 0;
-        virtual const uint getImgWidth()       const = 0;
-        virtual const uint getImgHeight()      const = 0;
-        virtual const uint getThreads()        const = 0;
-        virtual const std::string getImgPath() const = 0;
+        virtual const uint getSeWidth()          const = 0;
+        virtual const uint getSeHeight()         const = 0;
+        virtual const uint getImgWidth()         const = 0;
+        virtual const uint getImgHeight()        const = 0;
+        virtual const uint getThreads()          const = 0;
+        virtual const std::string getImgPath()   const = 0;
+        virtual const std::string getBenchName() const = 0;
 
 
 

@@ -160,6 +160,7 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
 
 
 
+
 //
 //
 //// la computazione viene eseguita su immergedImg e viene scritto il risultato in img

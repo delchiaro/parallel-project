@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.3)
 # set(OPT_FLAG "-O0")
 # set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O2")
-set(OPT_FLAG "-O2")
+ set(OPT_FLAG "-O0")
 
 # add_definitions( -DVERBOSE_INLINE_STATUS ) # it will define VERBOSE_INLINE_STATUS to show output about the inline status.
 
@@ -38,12 +38,6 @@ set(DEBUG)
 
 
 
-project(StructuredSimple)
-find_package( OpenCV REQUIRED )
-add_executable(StructuredSimple src/mainSimpleStructured.cpp src/utils/TimeProfiler.cpp)
-target_link_libraries( StructuredSimple ${OpenCV_LIBS}    )
-
-
 project(ObjectOriented)
 find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
 find_package( OpenCV REQUIRED )
@@ -60,30 +54,36 @@ target_link_libraries( Structured ${OpenCV_LIBS}    )
 
 
 
+#
+#
+#
+#project(StructuredSimple)
+#find_package( OpenCV REQUIRED )
+#add_executable(StructuredSimple src/mainSimpleStructured.cpp src/utils/TimeProfiler.cpp)
+#target_link_libraries( StructuredSimple ${OpenCV_LIBS}    )
 
 
-
-
-project(ObjectOriented-forceInline)
-find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
-find_package( OpenCV REQUIRED )
-add_executable( ObjectOriented-forceInline src/utils/TimeProfiler.cpp src/mainOOP.cpp src/benchOOP/BenchOOP.cpp src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp src/imProc/Image.cpp src/imProc/Matrix.cpp  src/imProc/Point.cpp  src/imProc/StructuringElement.cpp src/benchOOP/ErosionBenchOOP.cpp src/benchOOP/DilationBenchOOP.cpp src/benchOOP/OpeningBenchOOP.cpp src/benchOOP/ClosureBenchOOP.cpp )
-target_link_libraries( ObjectOriented-forceInline ${OpenCV_LIBS} )
-
-project(ObjectOriented-forceInlineDisabled)
-find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
-find_package( OpenCV REQUIRED )
-add_executable( ObjectOriented-forceInlineDisabled src/utils/TimeProfiler.cpp src/mainOOP.cpp src/benchOOP/BenchOOP.cpp src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp src/imProc/Image.cpp src/imProc/Matrix.cpp  src/imProc/Point.cpp  src/imProc/StructuringElement.cpp src/benchOOP/ErosionBenchOOP.cpp src/benchOOP/DilationBenchOOP.cpp src/benchOOP/OpeningBenchOOP.cpp src/benchOOP/ClosureBenchOOP.cpp )
-target_link_libraries( ObjectOriented-forceInlineDisabled ${OpenCV_LIBS} )
-set_target_properties(ObjectOriented-forceInlineDisabled PROPERTIES COMPILE_DEFINITIONS "DISABLE_FORCE_INLINE")
-
-
-project(ObjectOriented-inlineDisabled)
-find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
-find_package( OpenCV REQUIRED )
-add_executable( ObjectOriented-inlineDisabled src/utils/TimeProfiler.cpp src/mainOOP.cpp src/benchOOP/BenchOOP.cpp src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp src/imProc/Image.cpp src/imProc/Matrix.cpp  src/imProc/Point.cpp  src/imProc/StructuringElement.cpp src/benchOOP/ErosionBenchOOP.cpp src/benchOOP/DilationBenchOOP.cpp src/benchOOP/OpeningBenchOOP.cpp src/benchOOP/ClosureBenchOOP.cpp )
-target_link_libraries( ObjectOriented-inlineDisabled ${OpenCV_LIBS} )
-set_target_properties(ObjectOriented-inlineDisabled PROPERTIES COMPILE_DEFINITIONS "DISABLE_INLINE")
+#
+#project(ObjectOriented-forceInline)
+#find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
+#find_package( OpenCV REQUIRED )
+#add_executable( ObjectOriented-forceInline src/utils/TimeProfiler.cpp src/mainOOP.cpp src/benchOOP/BenchOOP.cpp src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp src/imProc/Image.cpp src/imProc/Matrix.cpp  src/imProc/Point.cpp  src/imProc/StructuringElement.cpp src/benchOOP/ErosionBenchOOP.cpp src/benchOOP/DilationBenchOOP.cpp src/benchOOP/OpeningBenchOOP.cpp src/benchOOP/ClosureBenchOOP.cpp )
+#target_link_libraries( ObjectOriented-forceInline ${OpenCV_LIBS} )
+#
+#project(ObjectOriented-forceInlineDisabled)
+#find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
+#find_package( OpenCV REQUIRED )
+#add_executable( ObjectOriented-forceInlineDisabled src/utils/TimeProfiler.cpp src/mainOOP.cpp src/benchOOP/BenchOOP.cpp src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp src/imProc/Image.cpp src/imProc/Matrix.cpp  src/imProc/Point.cpp  src/imProc/StructuringElement.cpp src/benchOOP/ErosionBenchOOP.cpp src/benchOOP/DilationBenchOOP.cpp src/benchOOP/OpeningBenchOOP.cpp src/benchOOP/ClosureBenchOOP.cpp )
+#target_link_libraries( ObjectOriented-forceInlineDisabled ${OpenCV_LIBS} )
+#set_target_properties(ObjectOriented-forceInlineDisabled PROPERTIES COMPILE_DEFINITIONS "DISABLE_FORCE_INLINE")
+#
+#
+#project(ObjectOriented-inlineDisabled)
+#find_package( OpenCV HINTS "/usr/lib/x86_64-linux-gnu/" )
+#find_package( OpenCV REQUIRED )
+#add_executable( ObjectOriented-inlineDisabled src/utils/TimeProfiler.cpp src/mainOOP.cpp src/benchOOP/BenchOOP.cpp src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp src/imProc/Image.cpp src/imProc/Matrix.cpp  src/imProc/Point.cpp  src/imProc/StructuringElement.cpp src/benchOOP/ErosionBenchOOP.cpp src/benchOOP/DilationBenchOOP.cpp src/benchOOP/OpeningBenchOOP.cpp src/benchOOP/ClosureBenchOOP.cpp )
+#target_link_libraries( ObjectOriented-inlineDisabled ${OpenCV_LIBS} )
+#set_target_properties(ObjectOriented-inlineDisabled PROPERTIES COMPILE_DEFINITIONS "DISABLE_INLINE")
 
 
 

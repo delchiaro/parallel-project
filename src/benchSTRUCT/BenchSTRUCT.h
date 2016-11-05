@@ -114,6 +114,9 @@ public:
     }
 
 
+    virtual const string getBenchName() const override{
+        return "Bench STRUCT";
+    }
     virtual const uint getSeWidth() const override {
         if(img != nullptr) return seWidth;
         else return 0;

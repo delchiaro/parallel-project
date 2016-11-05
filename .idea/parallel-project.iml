@@ -6,8 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/BenchManager.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/IConvBench.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/convolutionBench/BenchManager.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/benchSTRUCT/BenchSTRUCT.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/benchSTRUCT/BenchSTRUCT.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/imProc/StructuringElement.h" isTestSource="false" />
@@ -29,7 +27,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/BenchOOP.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/OpeningBenchOOP.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/ClosureBenchOOP.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/mainSimpleStructured.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/mainStructured.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>

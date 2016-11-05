@@ -74,6 +74,9 @@ public:
         imgProcessed = true;
     }
 
+    virtual const std::string getBenchName() const override{
+        return "Bench OOP";
+    }
 
     virtual const uint getSeWidth() const override {
         return SE.cols();

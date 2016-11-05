@@ -39,21 +39,27 @@ namespace convolutionBench {
         cout << " pre-run        <NUM> |  pr           -   Set number of loops for preliminar-run (before each bench)   {0}     \n";
         cout << " pre-run-global <NUM> |  prg          -   Set number of loops for a preliminar for the first bench     {0}     \n";
         cout << " --------------------------------------------------------------------------------------------------------------\n";
+        cout << " time-per-loop        | time-l ; tl   -   Time elapsed in each bench will be divided by #N of loops  {enabled} \n";
+        cout << " time-per-bench       | time-b ; tb   -   Time elapsed in each bench is not divided by #N of loops   {disabled}\n";
+        cout << "                                          (selecting time-b you will deselect time-l)                           \n";
+        cout << " --------------------------------------------------------------------------------------------------------------\n";
         cout << "                                                                                                               \n";
         cout << " --------------------------------O U T P U T-------------------------------------------------------------------\n";
         cout << " Select max 1 of these:                                                                                        \n";
-        cout << " csv-new       <PATH> | csv-n ; csv  -   Create new csv-table for the results                  (NB: OVERWRITE!)\n";
-        cout << " csv-append    <PATH> | csv-a        -   Append results to a csv table                                         \n";
+        cout << " csv-new       <PATH> | csv-n ; csv  -   Create new csv-table for the results                                  \n";
+        cout << " csv-append    <PATH> | csv-a        -   Append results to a csv table (doesn't add the first header row)      \n";
         cout << "                                                                                                               \n";
         cout << " Select max 1 of these:                                                                                        \n";
-        cout << " html-out      <PATH> | htm-o ; htm  -   Create new html-table, write results and close tags   (NB: OVERWRITE!)\n";
-        cout << " html-new      <PATH> | htm-n        -   Create new html-table, write results, leave open tags (NB: OVERWRITE!)\n";
+        cout << " html          <PATH> | htm          -   Create new html-table, write results and close tags                   \n";
+        cout << " html-new      <PATH> | htm-n        -   Create new html-table, write results, leave open tags                 \n";
         cout << " html-append   <PATH> | htm-a        -   Append results to an opened table                                     \n";
         cout << " html-close    <PATH> | htm-c        -   Append results to an opened table and close all html tags             \n";
         cout << "                                                                                                               \n";
+        cout << " truncate             | trunc        -   Overwrite output files if exists. USE WITH CAREFULL        {disabled} \n";
         cout << " variance             | var          -   Use variance instead of std deviation in the table         {disabled} \n";
         cout << " print-all            | pa           -   Print all the single bench timing in the table             {disabled} \n";
         cout << " seconds-mult   <NUM> | sec-mul ; sm -   Multiply seconds for a Number (use 1000 for ms)               {1}     \n";
+
         cout << " --------------------------------------------------------------------------------------------------------------\n";
         cout << " silent               |  sil         -   Hide output in terminal                                    {disabled} \n";
         cout << " verbose              |  v           -   Show verbose output in terminal                            {disabled} \n";
@@ -76,6 +82,22 @@ namespace convolutionBench {
         }
         imgPath = argv[1];
 
+        if(file_exists_test(imgPath) == false)
+        {
+            cout << "ERROR: FIRST PARAMETER MUST BE A PATH TO AN EXISTING IMAGE FILE" << std::endl;
+            exit(1);
+        }
+        else
+        {
+            cv::Mat image;
+            image = cv::imread(imgPath, CV_LOAD_IMAGE_COLOR);   // Read the file
+
+            if(! image.data )                              // Check for invalid input
+            {
+                cout <<  "ERROR: FIRST PARAMETER PATH POINTS TO A FILE THAT CAN NOT BE READ AS A VALID IMAGE" << std::endl ;
+                exit(1);
+            }
+        }
         for(int i = 2; i < argc; i++)
         {
             if      ( argcheck(argv[i], "bench",          "b"  ) )  benchNumber = atoi(argv[++i]);
@@ -96,7 +118,7 @@ namespace convolutionBench {
             }
 
             // TABLE OUT:
-            else if ( argcheck(argv[i], "html-out",   "htm-o", "htm") ) {
+            else if ( argcheck(argv[i], "html",   "htm-o", "htm") ) {
                 html_table_create = html_table_append = html_table_close = true;
                 out_html = argv[++i];
             }
@@ -121,7 +143,12 @@ namespace convolutionBench {
                 out_csv = argv[++i];
             }
 
-            // OUT FLAGS:
+            else if( argcheck(argv[i], "time-per-loop",  "time-l", "tl"))  timePerLoop = true;
+            else if( argcheck(argv[i], "time-per-bench", "time-b", "tb"))  timePerLoop = false;
+
+
+                // OUT FLAGS:
+            else if( argcheck(argv[i], "truncate", "trunc" ))  truncateFile = true;
             else if( argcheck(argv[i], "seconds-mult", "sec-mul", "sm"))  secondsMult = atoi(argv[++i]);
             else if( argcheck(argv[i], "variance",     "var" ) ) useVariance = true;
             else if( argcheck(argv[i], "print-all",    "pa"  ) ) printAllBenchs = true;
