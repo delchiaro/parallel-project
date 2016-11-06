@@ -61,7 +61,7 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
     {
         for(int x = 0; x < cols; x++)
         {
-            uchar min = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+            uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
 
 
             for(int i = 0; i < seRows; i++)
@@ -76,8 +76,8 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
                     {
 #endif
                         const uchar& current = immergedImg[INDEX(yi, x+j, cols)];
-                        if (current < min)
-                            min = current;
+                        if (current > max)
+                            max = current;
 
 #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     }
@@ -85,7 +85,7 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
                 }
             }
 
-            img[INDEX(y, x, cols)] = min;
+            img[INDEX(y, x, cols)] = max;
         }
     }
 
@@ -103,7 +103,7 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
     {
         for(int x = 0; x < cols; x++)
         {
-            uchar max = immergedImg[ INDEX( y + paddingTop, x + paddingLeft, immergedHeight) ];
+            uchar min = immergedImg[ INDEX( y + paddingTop, x + paddingLeft, immergedHeight) ];
 
             for(int i = 0; i < seRows; i++)
             {
@@ -118,8 +118,8 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
 #endif
 
                         const uchar current = immergedImg[INDEX( yi, x+j, immergedHeight)];
-                        if (current < max)
-                            max = current;
+                        if (current < min)
+                            min = current;
 
 #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     }
@@ -129,7 +129,7 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
 
             }
 
-            img[INDEX(y, x, cols)] = max;
+            img[INDEX(y, x, cols)] = min;
         }
     }
 }

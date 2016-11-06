@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.3)
 # set(OPT_FLAG "-O0")
 # set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O2")
- set(OPT_FLAG "-O0")
+ set(OPT_FLAG "-O2")
 
 # add_definitions( -DVERBOSE_INLINE_STATUS ) # it will define VERBOSE_INLINE_STATUS to show output about the inline status.
 

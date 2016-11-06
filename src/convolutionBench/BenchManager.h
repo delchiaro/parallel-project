@@ -283,7 +283,7 @@ protected:
             table_html << "\t\t<td>" << benchLoops << "</td>\n";
             table_html << "\t\t<td>" << benchNumber << "</td>\n";
             table_html << "\t\t<td>" << avg << "</td>\n";
-            table_html << "\t\t<td>" << useVariance << "</td>\n";
+            table_html << "\t\t<td>" << stdDev << "</td>\n";
             if(printAllBenchs) {
                 table_html << "\t\t<td></td>\n";
                 for(int i=0 ; i<benchNumber ; i++)
@@ -337,7 +337,7 @@ private:
     bool truncateFile = false;
     bool printAllBenchs = false;
     bool useVariance = false;
-    bool terminal = false;
+    bool terminal = true;
     bool verbose = false;
     bool showImg = false;
 

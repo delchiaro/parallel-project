@@ -167,11 +167,11 @@ namespace imProc
             #pragma omp parallel for num_threads(threads)
             for (int y = 0; y < rows(); y++)
             {
-                int y_TOP_PADD = y+TOP_PADDING;//optimization
+                //int y_TOP_PADD = y+TOP_PADDING;//optimization
 
                 for (int x = 0; x < cols(); x++)
                 {
-                    uchar min = immersion.get(y_TOP_PADD, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
+                    uchar min = immersion.get(y+TOP_PADDING, x+LEFT_PADDING); // optimization //uchar max = copy.get(y + TOP_PADDING, x+LEFT_PADDING);
 
                     for (int i = 0; i < SE.rows(); i++)
                     {
