@@ -53,6 +53,10 @@ target_link_libraries( Structured ${OpenCV_LIBS}    )
 
 
 
+project(Sequential)
+find_package( OpenCV REQUIRED )
+add_executable(Sequential src/mainSequential.cpp src/utils/TimeProfiler.cpp  src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp  src/benchSEQ/BenchSEQ.cpp)
+target_link_libraries( Sequential ${OpenCV_LIBS}    )
 
 #
 #

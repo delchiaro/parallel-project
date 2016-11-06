@@ -211,7 +211,7 @@ namespace imProc
             const int LEFT_PADDING = SE_center.x();
             const int RIGHT_PADDING = SE.cols() - SE_center.x();;
 
-            GenericImage immersion = makeImmersion(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 255);
+            GenericImage immersion = makeImmersion(TOP_PADDING, RIGHT_PADDING, BOTTOM_PADDING, LEFT_PADDING, 0);
             //immersion.imshow("erosion immersion"); // debug
 
 

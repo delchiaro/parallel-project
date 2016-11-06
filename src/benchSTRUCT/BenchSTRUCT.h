@@ -47,20 +47,15 @@ private:
     int paddingTop; // todo: not floor??
     int paddingLeft;
 
-    uchar* immergedImg = nullptr;
-    int immergedWidth;
-    int immergedHeight;
-
 
     std::string imgPath;
-    uchar* img = nullptr;
+    uchar* originalImg = nullptr;
+    uchar* processingImg = nullptr;
     uint imgWidth;
     uint imgHeight;
-    uchar* imgProcessing = nullptr;
 
     uint nThreads = 0;
     bool useThreadsAsDivisor = false;
-
 
 
 protected:
@@ -71,9 +66,8 @@ public:
     BenchSTRUCT() {}
 
     ~BenchSTRUCT() {
-        if(img != nullptr) delete[] img;
-        if(imgProcessing != nullptr) delete[] imgProcessing;
-        if(immergedImg != nullptr) delete[] immergedImg;
+        if(originalImg != nullptr) delete[] originalImg;
+        if(processingImg != nullptr) delete[] processingImg;
     }
 
     virtual void init(std::string imgPath, uint threads, uint se_width, uint se_height, bool useThreadsAsDivisor) override {
@@ -82,16 +76,11 @@ public:
         SE =  newImg(seHeight, seWidth, 1);
 
         this->imgPath = imgPath;
-        cv::Mat imgCV = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);
+        cv::Mat  imgCV = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);
         imgWidth = imgCV.cols;
         imgHeight = imgCV.rows;
-        if(img != nullptr) delete[] img;
-        img = cloneImg(imgCV.data, imgHeight, imgWidth);// we need to clone because imgCV distructor will delete imgCV.data !
-
-        paddingTop = ceil(seHeight/2); // todo: not floor??
-        paddingLeft = ceil(seWidth/2);
-
-
+        if(originalImg != nullptr) delete[] originalImg;
+        originalImg = cloneImg(imgCV.data, imgHeight, imgWidth);// we need to clone because imgCV distructor will delete imgCV.data !
 
         nThreads = threads;
         this->useThreadsAsDivisor = useThreadsAsDivisor;
@@ -99,17 +88,17 @@ public:
 
 
     virtual void showOriginalImg()  {
-        if(img != nullptr)
-             imshow("Original Image", img, imgHeight, imgWidth);
+        if(originalImg != nullptr)
+             imshow("Original Image", originalImg, imgHeight, imgWidth);
     }
     virtual void showProcessedImg() override {
-        if(img != nullptr)
+        if(originalImg != nullptr)
         {
-            if(imgProcessing != nullptr)
-                delete[] imgProcessing;
-            imgProcessing = cloneImg(img, imgHeight, imgWidth);
+            if(processingImg != nullptr)
+                delete[] processingImg;
+            processingImg = cloneImg(originalImg, imgHeight, imgWidth);
             run();
-            imshow("Processed Image", imgProcessing, imgHeight, imgWidth);
+            imshow("Processed Image", processingImg, imgHeight, imgWidth);
         }
     }
 
@@ -118,19 +107,19 @@ public:
         return "Bench STRUCT";
     }
     virtual const uint getSeWidth() const override {
-        if(img != nullptr) return seWidth;
+        if(originalImg != nullptr) return seWidth;
         else return 0;
     }
     virtual const uint getSeHeight() const override {
-        if(img != nullptr) return seHeight;
+        if(originalImg != nullptr) return seHeight;
         else return 0;
     }
     virtual const uint getImgWidth() const override {
-        if(img != nullptr) return imgWidth;
+        if(originalImg != nullptr) return imgWidth;
         else return 0;
     }
     virtual const uint getImgHeight() const override {
-        if(img != nullptr) return imgHeight;
+        if(originalImg != nullptr) return imgHeight;
         else return 0;
     }
 
@@ -144,18 +133,14 @@ public:
 
 
     virtual  void onPreRun() override {
-        if(imgProcessing != nullptr) delete[] imgProcessing;
-        imgProcessing = cloneImg(img, imgHeight, imgWidth);
-        if(immergedImg != nullptr) delete[] immergedImg;
-        immergedImg = immerge(imgProcessing, imgHeight, imgWidth, paddingTop, paddingLeft, 255);
-        immergedHeight = imgHeight+paddingTop*2;
-        immergedWidth = imgWidth +paddingLeft*2;
+        if(processingImg != nullptr) delete[] processingImg;
+        processingImg = cloneImg(originalImg, imgHeight, imgWidth);
     }
 
 
     // Curiously recurring template pattern: Static polymorphism
     void run() {
-        erosion(imgProcessing, imgHeight, imgWidth, SE, seHeight, seWidth);
+        erosion(processingImg, imgHeight, imgWidth, SE, seHeight, seWidth);
     }
 
 

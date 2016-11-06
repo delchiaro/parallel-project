@@ -2,17 +2,17 @@
 // Created by nagash on 23/10/16.
 //
 
-#include "BenchSTRUCT.h"
+#include "BenchSEQ.h"
 
 
 
 
 
-void BenchSTRUCT::imshow(string message, uchar* img, int rows, int cols){
+void BenchSEQ::imshow(string message, uchar* img, int rows, int cols){
     cv::Mat cvImg(rows, cols, CV_8U, img);
     cv::imshow(message, cvImg);
 }
-uchar* BenchSTRUCT::newImg(int rows, int cols, uchar initval)
+uchar* BenchSEQ::newImg(int rows, int cols, uchar initval)
 {
     uchar* img = new uchar[rows * cols];
     for(int i = 0; i < rows * cols ; i++)
@@ -20,7 +20,7 @@ uchar* BenchSTRUCT::newImg(int rows, int cols, uchar initval)
     return img;
 }
 
-uchar* BenchSTRUCT::cloneImg(const uchar* img, int rows, int cols)
+uchar* BenchSEQ::cloneImg(const uchar* img, int rows, int cols)
 {
     uchar* clone = new uchar[rows * cols];
     for(int i = 0; i < rows * cols ; i++)
@@ -29,7 +29,7 @@ uchar* BenchSTRUCT::cloneImg(const uchar* img, int rows, int cols)
 }
 
 // Si assume un kernel con dimensioni m*n, con m,n dispari
-uchar* BenchSTRUCT::immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , uchar initValue)
+uchar* BenchSEQ::immerge(const uchar* img, int rows, int cols, int paddingTop , int paddingLeft , uchar initValue)
 {
     const int immergRows = rows + 2*paddingTop;
     const int immergCols = cols + 2*paddingLeft;
@@ -53,7 +53,7 @@ uchar* BenchSTRUCT::immerge(const uchar* img, int rows, int cols, int paddingTop
 
 
 // la computazione viene eseguita su immergedImg e viene scritto il risultato in img
-void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
+void BenchSEQ::dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
 {
 
     int paddingTop = floor(seCols/2);
@@ -67,7 +67,6 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
         int xj_row_index_limit=0;
 #endif
 
-#pragma omp parallel for num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)
@@ -106,8 +105,9 @@ void BenchSTRUCT::dilation(uchar*& img, int rows, int cols, const uchar* SE, int
 
 
 
+
 // la computazione viene eseguita su immergedImg e viene scritto il risultato in img
-void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
+void BenchSEQ::erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
 {
 
     int paddingTop = ceil(seCols/2);
@@ -116,7 +116,6 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
     uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
     int immergedCols = cols + 2*paddingLeft;
 
-#pragma omp parallel for num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)
@@ -154,49 +153,8 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
     delete[] immergedImg;
 }
 
-//
-//// la computazione viene eseguita su immergedImg e viene scritto il risultato in img
-//void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols)
-//{
-//// TODO: remember to try different schedulers !!!
-//#pragma omp parallel for num_threads(nThreads)
-//    for(int y = 0; y < rows; y++)
-//    {
-//        for(int x = 0; x < cols; x++)
-//        {
-//            uchar min = immergedImg[ INDEX( y + paddingTop, x + paddingLeft, immergedHeight) ];
-//
-//            for(int i = 0; i < seRows; i++)
-//            {
-//
-//                const int yi = y+i;
-//                for(int j = 0; j < seCols; j++)
-//                {
-//
-//#ifndef RECTANGLE_KERNEL_OPTIMIZATION
-//                    if(SE[INDEX(i,j, seCols)]  == 1)
-//                    {
-//#endif
-//
-//                        const uchar current = immergedImg[INDEX( yi, x+j, immergedHeight)];
-//                        if (current < min)
-//                            min = current;
-//
-//#ifndef RECTANGLE_KERNEL_OPTIMIZATION
-//                    }
-//#endif
-//
-//                }
-//
-//            }
-//
-//            img[INDEX(y, x, cols)] = min;
-//        }
-//    }
-//}
-//
-//
-//
+
+
 
 
 
@@ -225,7 +183,7 @@ void BenchSTRUCT::erosion(uchar*& img, int rows, int cols, const uchar* SE, int 
 //
 //
 //// la computazione viene eseguita su immergedImg e viene scritto il risultato in img
-//void BenchSTRUCT::blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols, int blockRows, int blockCols)
+//void BenchSEQ::blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int seCols, int blockRows, int blockCols)
 //{
 //    /*  Esempio di una immagine 11x11 divisa in 4 blocchi riga e 4 blocchi colonna
 //     *  I blocchi centrali avranno dimensione block_dim_rows e block_dim_cols (3x3)

@@ -27,8 +27,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/BenchOOP.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/OpeningBenchOOP.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/benchOOP/ClosureBenchOOP.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchSEQ/BenchSEQ.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchSEQ/BenchSEQ.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/TimeProfiler.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/mainSequential.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/mainStructured.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>

@@ -203,18 +203,20 @@ void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int 
     int paddingTop = floor(seCols/2);
     int paddingLeft = floor(seRows/2);
 
-    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
-    #ifdef SUPER_OPT
-        int xj_row_index = 0;
+    uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 0);
+    int immergedCols = cols + 2*paddingLeft;
+
+#ifdef SUPER_OPT
+    int xj_row_index = 0;
         int xj_row_index_limit=0;
-    #endif
+#endif
 
 #pragma omp parallel for num_threads(nThreads)
     for(int y = 0; y < rows; y++)
     {
         for(int x = 0; x < cols; x++)
         {
-            uchar min = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, cols) ];
+            uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
 
 
             for(int i = 0; i < seRows; i++)
@@ -224,21 +226,21 @@ void dilation(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int 
                 for(int j = 0; j < seCols; j++)
                 {
 
-                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+#ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     if(SE[INDEX(i,j, seCols)]  == 1)
                     {
-                #endif
+#endif
                     const uchar& current = immergedImg[INDEX(yi, x+j, cols)];
-                    if (current < min)
-                        min = current;
+                    if (current > max)
+                        max = current;
 
-                #ifndef RECTANGLE_KERNEL_OPTIMIZATION
+#ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     }
-                #endif
+#endif
                 }
             }
 
-            img[INDEX(y, x, cols)] = min;
+            img[INDEX(y, x, cols)] = max;
         }
     }
     delete[] immergedImg;
@@ -256,7 +258,6 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
     int paddingLeft = ceil(seRows/2);
 
     uchar* immergedImg = immerge(img, rows, cols, paddingTop, paddingLeft, 255);
-    int immergedRows = rows + 2*paddingTop;
     int immergedCols = cols + 2*paddingLeft;
 
 #pragma omp parallel for num_threads(nThreads)
@@ -264,7 +265,7 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
     {
         for(int x = 0; x < cols; x++)
         {
-            uchar max = immergedImg[ INDEX( y + paddingTop, x + paddingLeft, immergedCols) ];
+            uchar min = immergedImg[ INDEX( y + paddingTop, x + paddingLeft, immergedCols) ];
 
             for(int i = 0; i < seRows; i++)
             {
@@ -279,8 +280,8 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
                 #endif
 
                     const uchar current = immergedImg[INDEX( yi, x+j, immergedCols)];
-                    if (current < max)
-                        max = current;
+                    if (current < min)
+                        min = current;
 
                 #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                     }
@@ -290,7 +291,7 @@ void erosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, int s
 
             }
 
-            img[INDEX(y, x, cols)] = max;
+            img[INDEX(y, x, cols)] = min;
         }
     }
 
@@ -370,7 +371,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                     const int block_dim_col_stop = (bj+1)*block_dim_cols;
                     for(int x = bj*block_dim_cols; x < block_dim_col_stop; x++)
                     {
-                        uchar max = immergedImg[ INDEX( (y+paddingTop), (x+paddingLeft), immergedCols) ];
+                        uchar min = immergedImg[ INDEX( (y+paddingTop), (x+paddingLeft), immergedCols) ];
 
                         for(int i = 0; i < seRows; i++)
                         {
@@ -385,8 +386,8 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                                 #endif
 
                                 const uchar current = immergedImg[INDEX(yi, (x+j), immergedCols)];
-                                if (current < max)
-                                    max = current;
+                                if (current < min)
+                                    min = current;
 
                                 #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                                 }
@@ -396,7 +397,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 
                         }
 
-                        img[INDEX(y, x, cols)] = max;
+                        img[INDEX(y, x, cols)] = min;
                     }
                 }
 
@@ -424,7 +425,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                 const int fhBlock_dim_col_stop = (bj+1)*fhBlock_dim_cols + fhBlock_dim_cols;
                 for(int x = bj*fhBlock_dim_cols; x < fhBlock_dim_col_stop; x++)
                 {
-                    uchar max = immergedImg[ INDEX(y+ paddingTop, x + paddingLeft, immergedCols) ];
+                    uchar min = immergedImg[ INDEX(y+ paddingTop, x + paddingLeft, immergedCols) ];
 
                     for(int i = 0; i < seRows; i++)
                     {
@@ -439,8 +440,8 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                             #endif
 
                             const uchar current = immergedImg[INDEX(yi, x+j, immergedCols)];
-                            if (current < max)
-                                max = current;
+                            if (current < min)
+                                min = current;
 
                             #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                             }
@@ -450,7 +451,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 
                     }
 
-                    img[INDEX(y, x, cols)] = max;
+                    img[INDEX(y, x, cols)] = min;
                 }
             }
 
@@ -476,7 +477,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                 const int fvBlock_dim_col_stop = (bj+1)*block_dim_cols + fvBlock_dim_cols;
                 for(int x = bj*fvBlock_dim_cols; x < fvBlock_dim_col_stop; x++)
                 {
-                    uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
+                    uchar min = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
 
                     for(int i = 0; i < seRows; i++)
                     {
@@ -491,8 +492,8 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                             #endif
 
                             const uchar current = immergedImg[INDEX(yi, x+j, immergedCols)];
-                            if (current < max)
-                                max = current;
+                            if (current < min)
+                                min = current;
 
                             #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                             }
@@ -502,7 +503,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 
                     }
 
-                    img[INDEX(y, x, cols)] = max;
+                    img[INDEX(y, x, cols)] = min;
                 }
             }
 
@@ -525,7 +526,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
             const int ffBlock_dim_col_stop = bj*block_dim_cols + ffBlock_dim_cols;
             for(int x = bj*ffBlock_dim_cols; x < ffBlock_dim_col_stop; x++)
             {
-                uchar max = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
+                uchar min = immergedImg[ INDEX(y + paddingTop, x + paddingLeft, immergedCols) ];
 
                 for(int i = 0; i < seRows; i++)
                 {
@@ -540,8 +541,8 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
                         #endif
 
                         const uchar current = immergedImg[INDEX(yi, x+j, immergedCols)];
-                        if (current < max)
-                            max = current;
+                        if (current < min)
+                            min = current;
 
                         #ifndef RECTANGLE_KERNEL_OPTIMIZATION
                         }
@@ -551,7 +552,7 @@ void blockErosion(uchar*& img, int rows, int cols, const uchar* SE, int seRows, 
 
                 }
 
-                img[INDEX(y, x, cols)] = max;
+                img[INDEX(y, x, cols)] = min;
             }
         }
 
