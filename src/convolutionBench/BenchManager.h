@@ -47,7 +47,7 @@ public:
             else
                 table_html.open(out_html, ios_base::app   | ios_base::out );
 
-            table_html << "\n\n";
+            table_html << "\n";
             table_html << "<h4>" << bench.getBenchName() << "</h4>\n";
             table_html << "<table border=\"1px solid black\" style=\"border: 1px solid black; border-collapse: collapse\">\n\n";
 
@@ -78,7 +78,7 @@ public:
                  table_csv.open(out_csv, ios_base::trunc | ios_base::out );
             else table_csv.open(out_csv, ios_base::app   | ios_base::out );
 
-            table_csv << "\n\n";
+            //table_csv << "\n\n";
             table_csv << "\"" << bench.getBenchName() << "\", ";
             table_csv << "\"SE w\", ";
             table_csv << "\"SE h\", ";
@@ -173,9 +173,20 @@ public:
         if(html_table_close) {
             if(table_html.is_open() == false)
                 table_html.open(out_html, ios_base::app);
-            table_html << "</table>\n<br>\n";
+            table_html << "</table>\n<br>\n\n";
+            table_html.close();
         }
 
+        if(csv_table_append)
+        {
+            if(table_csv.is_open() == false)
+                table_csv.open(out_csv, ios_base::app);
+            table_csv << "\n\n";
+            table_csv.close();
+        }
+
+
+        // Useless check ??
         if(table_html.is_open())
             table_html.close();
 

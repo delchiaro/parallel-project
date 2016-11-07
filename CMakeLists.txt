@@ -5,15 +5,11 @@ cmake_minimum_required(VERSION 3.3)
 # set(OPT_FLAG "-O0")
 # set(OPT_FLAG "-O1")
 # set(OPT_FLAG "-O2")
- set(OPT_FLAG "-O2")
+ set(OPT_FLAG "-O0")
 
 # add_definitions( -DVERBOSE_INLINE_STATUS ) # it will define VERBOSE_INLINE_STATUS to show output about the inline status.
 
-#
-# From: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=640214
-#[1] set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
-#[2] set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
-#[3] set(CMAKE_CXX_FLAGS_INIT "")
+
 # Default: set( CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set( CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 
@@ -58,13 +54,17 @@ find_package( OpenCV REQUIRED )
 add_executable(Sequential src/mainSequential.cpp src/utils/TimeProfiler.cpp  src/convolutionBench/BenchManager.cpp src/convolutionBench/IConvBench.cpp  src/benchSEQ/BenchSEQ.cpp)
 target_link_libraries( Sequential ${OpenCV_LIBS}    )
 
-#
-#
-#
-#project(StructuredSimple)
-#find_package( OpenCV REQUIRED )
-#add_executable(StructuredSimple src/mainSimpleStructured.cpp src/utils/TimeProfiler.cpp)
-#target_link_libraries( StructuredSimple ${OpenCV_LIBS}    )
+
+
+
+
+
+
+
+project(StructuredSimple)
+find_package( OpenCV REQUIRED )
+add_executable(StructuredSimple src/mainSimpleStructured.cpp src/utils/TimeProfiler.cpp)
+target_link_libraries( StructuredSimple ${OpenCV_LIBS}    )
 
 
 #
